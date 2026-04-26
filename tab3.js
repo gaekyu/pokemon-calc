@@ -41,7 +41,7 @@ const T3 = {
     const container = document.getElementById('t3-save-list');
 
     if (list.length === 0) {
-      container.innerHTML = `<div class="save-empty">저장된 세팅이 없어요.<br>결정력/내구력 탭에서 저장하거나 + 버튼을 눌러 추가해보세요.</div>`;
+      container.innerHTML = `<div class="save-empty">저장된 세팅이 없어요.<br>결정력 탭에서 저장하거나 + 버튼을 눌러 추가해보세요.</div>`;
       return;
     }
 
@@ -52,7 +52,7 @@ const T3 = {
             <div class="save-card-name">${entry.label || entry.pokemon || '이름 없음'}</div>
             <div class="save-card-meta">
               ${entry.pokemon || ''} &nbsp;|&nbsp;
-              ${entry.source === 'tab1' ? '결정력' : entry.source === 'tab2' ? '내구력' : '수동'}
+              ${entry.source === 'tab1' ? '결정력' : '수동'}
               &nbsp;|&nbsp; ${entry.createdAt || ''}
             </div>
           </div>
@@ -63,7 +63,6 @@ const T3 = {
         </div>
         <div class="save-card-actions">
           <button class="btn btn-secondary btn-sm" onclick="T3.applyToTab1(${entry.id})">⚡ 결정력에 적용</button>
-          <button class="btn btn-secondary btn-sm" onclick="T3.applyToTab2(${entry.id})">🛡️ 내구력에 적용</button>
           <button class="btn btn-danger btn-sm" onclick="T3.confirmDelete(${entry.id})">삭제</button>
         </div>
       </div>
@@ -88,14 +87,6 @@ const T3 = {
     showToast('결정력 탭에 적용했어요!', 'success');
   },
 
-  applyToTab2(id) {
-    const entry = T3.load().find(e => e.id === id);
-    if (!entry) return;
-    switchTab('tab2');
-    setTimeout(() => { T2.loadData(entry); }, 50);
-    showToast('내구력 탭에 적용했어요!', 'success');
-  },
-
   confirmDelete(id) {
     if (confirm('이 세팅을 삭제할까요?')) {
       T3.deleteEntry(id);
@@ -112,8 +103,6 @@ const T3 = {
     let data = {};
     if (T3.pendingSource === 'tab1') {
       data = T1.getData();
-    } else if (T3.pendingSource === 'tab2') {
-      data = T2.getData();
     }
 
     data.label = label;
@@ -136,10 +125,6 @@ function openSaveModal(source) {
     const d = T1.getData();
     pokeName = d.pokemon;
     summaryHtml = `기술: ${d.move || '—'} · 성격: ${(d.nature||'').split('(')[0]} · 노력치: ${d.ev} · 도구: ${d.item}`;
-  } else if (source === 'tab2') {
-    const d = T2.getData();
-    pokeName = d.pokemon;
-    summaryHtml = `성격: ${(d.nature||'').split('(')[0]} · HP노력치: ${d.hpEv} · 방노력치: ${d.defEv} · 도구: ${d.item}`;
   }
 
   document.getElementById('modal-poke-name').value = pokeName;

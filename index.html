@@ -594,7 +594,6 @@ textarea { resize: vertical; min-height: 60px; }
 <!-- 탭 네비게이션 -->
 <div class="tab-nav">
   <button class="tab-btn active" data-tab="tab1">⚡ 결정력</button>
-  <button class="tab-btn" data-tab="tab2">🛡️ 내구력</button>
   <button class="tab-btn" data-tab="tab3">📦 저장소</button>
   <button class="tab-btn" data-tab="tab4">🔍 역추적</button>
   <button class="tab-btn" data-tab="tab5">💨 스피드</button>
@@ -816,7 +815,7 @@ textarea { resize: vertical; min-height: 60px; }
           <span class="result-val" id="t1-res-dmg-pct">—</span>
         </div>
         <div class="result-row">
-          <span class="result-key">1타 여부</span>
+          <span class="result-key">예상 타수</span>
           <span class="result-val" id="t1-res-ohko">—</span>
         </div>
       </div>
@@ -825,110 +824,6 @@ textarea { resize: vertical; min-height: 60px; }
     <!-- 저장 버튼 -->
     <div style="text-align:right; margin-top:12px;">
       <button class="btn btn-secondary" id="t1-save-btn">📦 저장소에 저장</button>
-    </div>
-
-  </div>
-</div>
-
-<!-- ======================== TAB 2: 내구력 ======================== -->
-<div id="tab2" class="tab-content">
-  <div class="calc-container">
-
-    <div class="card">
-      <div class="card-title">포켓몬</div>
-      <div class="two-col">
-        <div class="form-group">
-          <label class="form-label">포켓몬</label>
-          <div class="search-select-wrap" id="t2-poke-wrap">
-            <input type="text" id="t2-poke-search" placeholder="이름 검색..." autocomplete="off">
-            <div class="dropdown-list hidden" id="t2-poke-list"></div>
-          </div>
-        </div>
-        <div class="form-group">
-          <label class="form-label">폼</label>
-          <select id="t2-poke-form"></select>
-        </div>
-      </div>
-      <div id="t2-poke-info" style="display:none; margin-top:8px;">
-        <div style="display:flex; gap:12px; align-items:center;">
-          <img id="t2-poke-img" class="poke-img" src="" alt="">
-          <div style="font-size:12px; color:var(--text-dim);">
-            <div style="margin-bottom:4px;"><span id="t2-poke-types"></span></div>
-            HP종족값: <b id="t2-base-hp">—</b> &nbsp;
-            방어종족값: <b id="t2-base-def">—</b> &nbsp;
-            특방종족값: <b id="t2-base-spd">—</b>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div class="card">
-      <div class="card-title">능력치 설정</div>
-      <div class="three-col">
-        <div class="form-group">
-          <label class="form-label">성격</label>
-          <select id="t2-nature"></select>
-        </div>
-        <div class="form-group">
-          <label class="form-label">HP 노력치 (0–32)</label>
-          <div class="slider-group">
-            <input type="range" id="t2-hp-ev-range" min="0" max="32" value="0">
-            <div class="slider-val" id="t2-hp-ev-val">0</div>
-          </div>
-        </div>
-        <div style="display:flex; gap:8px;">
-          <div class="form-group" style="flex:1;">
-            <label class="form-label">방어 노력치</label>
-            <div class="slider-group">
-              <input type="range" id="t2-def-ev-range" min="0" max="32" value="0">
-              <div class="slider-val" id="t2-def-ev-val">0</div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="form-group" style="margin-top:4px;">
-        <label class="form-label">특방 노력치 (0–32)</label>
-        <div class="slider-group">
-          <input type="range" id="t2-spd-ev-range" min="0" max="32" value="0">
-          <div class="slider-val" id="t2-spd-ev-val">0</div>
-        </div>
-      </div>
-    </div>
-
-    <div class="card" style="padding:12px 16px;">
-      <div class="form-group">
-        <label class="form-label">도구</label>
-        <select id="t2-item"></select>
-      </div>
-    </div>
-
-    <div class="result-panel">
-      <div class="result-title">내구력 결과</div>
-      <div class="result-row">
-        <span class="result-key">HP 실능</span>
-        <span class="result-val" id="t2-res-hp">—</span>
-      </div>
-      <div class="result-row">
-        <span class="result-key">방어 실능</span>
-        <span class="result-val" id="t2-res-def">—</span>
-      </div>
-      <div class="result-row">
-        <span class="result-key">특방 실능</span>
-        <span class="result-val" id="t2-res-spd">—</span>
-      </div>
-      <div class="divider"></div>
-      <div class="result-row">
-        <span class="result-key">물리 내구력 (HP × 방어 / 0.411)</span>
-        <span class="result-val highlight" id="t2-res-phys-bulk">—</span>
-      </div>
-      <div class="result-row">
-        <span class="result-key">특수 내구력 (HP × 특방 / 0.411)</span>
-        <span class="result-val highlight" id="t2-res-spec-bulk">—</span>
-      </div>
-    </div>
-
-    <div style="text-align:right; margin-top:12px;">
-      <button class="btn btn-secondary" id="t2-save-btn">📦 저장소에 저장</button>
     </div>
 
   </div>
@@ -1306,7 +1201,6 @@ textarea { resize: vertical; min-height: 60px; }
 <script src="move-db.js"></script>
 <script src="calc.js"></script>
 <script src="tab1.js"></script>
-<script src="tab2.js"></script>
 <script src="tab3.js"></script>
 <script src="tab4.js"></script>
 <script src="tab5.js"></script>

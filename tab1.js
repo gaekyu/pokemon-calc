@@ -254,15 +254,24 @@ const T1 = {
     pctEl.textContent = dmgPct ? `${dmgPct}%` : '—';
     pctEl.className = 'result-val ' + (pctNum >= 100 ? 'danger' : pctNum >= 50 ? 'warning' : 'positive');
 
-    if (pctNum >= 100) {
-      ohkoEl.textContent = '확정 1타';
-      ohkoEl.className = 'result-val danger';
-    } else if (pctNum >= 50) {
-      ohkoEl.textContent = `약 ${(pctNum / 100 * 100).toFixed(0)}% 데미지`;
-      ohkoEl.className = 'result-val warning';
+    if (pctNum > 0) {
+      const hits = Math.ceil(100 / pctNum);
+      if (hits === 1) {
+        ohkoEl.textContent = '확정 1타 (즉사)';
+        ohkoEl.className = 'result-val danger';
+      } else if (hits === 2) {
+        ohkoEl.textContent = '확정 2타';
+        ohkoEl.className = 'result-val warning';
+      } else if (hits === 3) {
+        ohkoEl.textContent = '확정 3타';
+        ohkoEl.className = 'result-val positive';
+      } else {
+        ohkoEl.textContent = `확정 ${hits}타`;
+        ohkoEl.className = 'result-val positive';
+      }
     } else {
-      ohkoEl.textContent = `약 ${(pctNum / 100 * 100).toFixed(0)}% 데미지`;
-      ohkoEl.className = 'result-val positive';
+      ohkoEl.textContent = '—';
+      ohkoEl.className = 'result-val';
     }
   },
 

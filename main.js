@@ -166,7 +166,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // 각 탭 초기화
   T1.init();
-  T2.init();
   T3.init();
   T4.init();
   T5.init();
