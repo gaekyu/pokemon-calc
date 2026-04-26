@@ -6,12 +6,179 @@ function switchTab(tabId) {
   document.getElementById(tabId).classList.add('active');
 }
 
-// ===== 공통 유틸: 성격 셀렉트 채우기 =====
+// ===== 성격 테이블 피커 =====
+const NATURE_TABLE_DATA = [
+  ['노력(무보정)',          '외로움(공격↑방어↓)',      '고집(공격↑특공↓)',      '개구쟁이(공격↑특방↓)',    '용감(공격↑스피드↓)'],
+  ['대담(방어↑공격↓)',     '온순(무보정)',              '장난꾸러기(방어↑특공↓)', '촐랑(방어↑특방↓)',       '무사태평(방어↑스피드↓)'],
+  ['조심(특공↑공격↓)',     '의젓(특공↑방어↓)',         '수줍음(무보정)',          '덜렁(특공↑특방↓)',       '냉정(특공↑스피드↓)'],
+  ['차분(특방↑공격↓)',     '얌전(특방↑방어↓)',         '신중(특방↑특공↓)',       '변덕(무보정)',            '건방(특방↑스피드↓)'],
+  ['겁쟁이(스피드↑공격↓)', '성급(스피드↑방어↓)',      '명랑(스피드↑특공↓)',     '천진난만(스피드↑특방↓)',  '성실(무보정)'],
+];
+const NATURE_STAT_LABELS = ['공격', '방어', '특공', '특방', '스피드'];
+let _naturePendingElId = null;
+
 function fillNatureSelect(elId) {
   const el = document.getElementById(elId);
-  el.innerHTML = NATURE_NAMES.map(n =>
-    `<option value="${n}">${n}</option>`
-  ).join('');
+  if (!el) return;
+  el.style.display = 'none';
+  if (document.getElementById(elId + '-np-btn')) return;
+  const btn = document.createElement('button');
+  btn.type = 'button';
+  btn.id = elId + '-np-btn';
+  btn.className = 'nature-picker-btn';
+  btn.innerHTML = `<span class="np-name">노력</span><span class="np-effect" style="display:none;"></span><span class="np-arrow">▼</span>`;
+  btn.addEventListener('click', () => openNatureTable(elId));
+  el.parentNode.insertBefore(btn, el.nextSibling);
+  el.value = '노력(무보정)';
+}
+
+function updateNaturePickerDisplay(elId) {
+  const el = document.getElementById(elId);
+  const btn = document.getElementById(elId + '-np-btn');
+  if (!el || !btn) return;
+  const natureName = el.value || '노력(무보정)';
+  const baseName = natureName.split('(')[0];
+  const nature = NATURES[natureName];
+  let effectText = '';
+  if (nature) {
+    const SNAMES = { atk:'공격', def:'방어', spa:'특공', spd:'특방', spe:'스피드' };
+    const boost = Object.entries(nature).find(([,v]) => v === 1.1);
+    const lower = Object.entries(nature).find(([,v]) => v === 0.9);
+    if (boost && lower) effectText = `${SNAMES[boost[0]]}↑ ${SNAMES[lower[0]]}↓`;
+  }
+  btn.querySelector('.np-name').textContent = baseName;
+  const eff = btn.querySelector('.np-effect');
+  eff.textContent = effectText;
+  eff.style.display = effectText ? 'inline' : 'none';
+}
+
+function openNatureTable(elId) {
+  _naturePendingElId = elId;
+  const cur = document.getElementById(elId)?.value || '';
+  let html = `<table><tr><th></th>${NATURE_STAT_LABELS.map(l=>`<th class="np-col-header">↓${l}</th>`).join('')}</tr>`;
+  NATURE_TABLE_DATA.forEach((row, ri) => {
+    html += `<tr><th class="np-row-header">↑${NATURE_STAT_LABELS[ri]}</th>`;
+    row.forEach((n, ci) => {
+      const base = n.split('(')[0];
+      const cls = (ri===ci?'neutral ':'') + (n===cur?'selected':'');
+      html += `<td class="${cls.trim()}" data-nature="${n}">${base}</td>`;
+    });
+    html += '</tr>';
+  });
+  html += '</table>';
+  document.getElementById('nt-table-wrap').innerHTML = html;
+  document.getElementById('nature-table-overlay').classList.add('open');
+  document.querySelectorAll('#nt-table-wrap td[data-nature]').forEach(td => {
+    td.addEventListener('click', () => selectNature(td.dataset.nature));
+  });
+}
+
+function selectNature(natureName) {
+  const elId = _naturePendingElId;
+  if (!elId) return;
+  const el = document.getElementById(elId);
+  if (el) { el.value = natureName; updateNaturePickerDisplay(elId); el.dispatchEvent(new Event('change')); }
+  closeNatureTable();
+}
+
+function closeNatureTable() {
+  document.getElementById('nature-table-overlay').classList.remove('open');
+  _naturePendingElId = null;
+}
+
+// ===== 저장소 불러오기 모달 =====
+let _storagePickTarget = null;
+
+function openStoragePickFor(target) {
+  _storagePickTarget = target;
+  const list = T3.load();
+  const container = document.getElementById('storage-pick-list');
+  if (list.length === 0) {
+    container.innerHTML = '<div class="save-empty">저장된 포켓몬이 없어요.</div>';
+  } else {
+    container.innerHTML = list.map(e => {
+      const poke = POKEMON_MAP[e.pokemon];
+      const spriteUrl = poke ? getPokemonSpriteUrl(poke) : '';
+      const nature = e.nature ? e.nature.split('(')[0] : '—';
+      return `<div class="storage-pick-item" onclick="applyStorageEntry(${e.id})">
+        <img src="${spriteUrl}" class="pick-sprite" onerror="this.style.display='none'" alt="">
+        <div><div class="pick-name">${e.label || e.pokemon || '이름 없음'}</div>
+        <div class="pick-meta">${e.pokemon||''} · ${nature} · ${e.item||'없음'}</div></div>
+      </div>`;
+    }).join('');
+  }
+  document.getElementById('storage-pick-modal').classList.add('open');
+}
+
+function applyStorageEntry(id) {
+  const entry = T3.load().find(e => e.id === id);
+  if (!entry) return;
+  const evs = entry.evs || {};
+  const target = _storagePickTarget;
+  closeStoragePick();
+
+  if (target === 't1-atk') {
+    switchTab('tab1');
+    setTimeout(() => {
+      if (entry.pokemon) T1.onPokeSelect(entry.pokemon);
+      if (entry.nature) { document.getElementById('t1-nature').value = entry.nature; updateNaturePickerDisplay('t1-nature'); }
+      const ev = evs.atk || 0;
+      document.getElementById('t1-ev-range').value = ev;
+      document.getElementById('t1-ev-val').textContent = ev;
+      document.getElementById('t1-ev-num').value = ev;
+      if (entry.ability) document.getElementById('t1-ability').value = entry.ability;
+      if (entry.item) document.getElementById('t1-item').value = entry.item;
+      if (entry.moves?.[0]?.name) T1.onMoveSelect(entry.moves[0].name);
+      T1.update();
+    }, 50);
+  } else if (target === 't1-def') {
+    switchTab('tab1');
+    setTimeout(() => {
+      if (entry.pokemon) T1.onDefPokeSelect(entry.pokemon);
+      if (entry.nature) { document.getElementById('t1-def-nature').value = entry.nature; updateNaturePickerDisplay('t1-def-nature'); }
+      document.getElementById('t1-def-hp-ev').value = evs.hp || 0;
+      document.getElementById('t1-def-def-ev').value = evs.def || 0;
+      T1.update();
+    }, 50);
+  } else if (target === 't5-my') {
+    switchTab('tab5');
+    setTimeout(() => {
+      if (entry.pokemon) T5.onPokeSelect(entry.pokemon);
+      if (entry.nature) { document.getElementById('t5-nature').value = entry.nature; updateNaturePickerDisplay('t5-nature'); }
+      const ev = evs.spe || 0;
+      document.getElementById('t5-ev-range').value = ev;
+      document.getElementById('t5-ev-val').textContent = ev;
+      document.getElementById('t5-ev-num').value = ev;
+      if (entry.item) document.getElementById('t5-item').value = entry.item;
+      T5.update();
+    }, 50);
+  } else if (target === 't5-cmp') {
+    switchTab('tab5');
+    setTimeout(() => {
+      if (entry.pokemon) T5.onCmpPokeSelect(entry.pokemon);
+      if (entry.nature) { document.getElementById('t5-cmp-nature').value = entry.nature; updateNaturePickerDisplay('t5-cmp-nature'); }
+      const ev = evs.spe || 0;
+      document.getElementById('t5-cmp-ev-range').value = ev;
+      document.getElementById('t5-cmp-ev-val').textContent = ev;
+      if (entry.item) document.getElementById('t5-cmp-item').value = entry.item;
+      T5.update();
+    }, 50);
+  } else if (target === 't4') {
+    switchTab('tab4');
+    setTimeout(() => {
+      if (entry.pokemon) T4.onPokeSelect(entry.pokemon);
+      if (entry.nature) { document.getElementById('t4-nature').value = entry.nature; updateNaturePickerDisplay('t4-nature'); }
+      document.getElementById('t4-hp-ev').value = evs.hp || 0;
+      document.getElementById('t4-def-ev').value = evs.def || 0;
+      T4.updateMyStats();
+    }, 50);
+  }
+  showToast('불러왔어요!', 'success');
+}
+
+function closeStoragePick() {
+  document.getElementById('storage-pick-modal').classList.remove('open');
+  _storagePickTarget = null;
 }
 
 // ===== 공통 유틸: 도구 셀렉트 채우기 =====

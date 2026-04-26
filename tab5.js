@@ -145,24 +145,30 @@ const T5 = {
     document.getElementById('t5-res-rank').textContent  = fmt(my.afterRank);
     document.getElementById('t5-res-total').textContent = fmt(my.total);
 
-    // 비교 섹션
+    // 상대 스피드 + 판정 (항상 표시)
+    const verdict = document.getElementById('t5-cmp-verdict');
     if (T5.cmpPokemon) {
       const cmpTotal = T5.calcCmpSpeed();
-      const cmpEl = document.getElementById('t5-cmp-result');
-      cmpEl.style.display = 'block';
       document.getElementById('t5-cmp-res-spd').textContent = fmt(cmpTotal);
 
-      const verdict = document.getElementById('t5-cmp-verdict');
       if (my.total > cmpTotal) {
         verdict.textContent = '⚡ 선공!';
         verdict.style.color = 'var(--positive)';
+        verdict.style.fontSize = '22px';
       } else if (my.total < cmpTotal) {
         verdict.textContent = '🐢 후공';
         verdict.style.color = 'var(--danger)';
+        verdict.style.fontSize = '22px';
       } else {
         verdict.textContent = '⚖️ 동속 (동속무브 유리)';
         verdict.style.color = 'var(--warning)';
+        verdict.style.fontSize = '18px';
       }
+    } else {
+      document.getElementById('t5-cmp-res-spd').textContent = '—';
+      verdict.textContent = '상대 포켓몬을 선택하면 선공 여부가 표시됩니다.';
+      verdict.style.color = 'var(--text-muted)';
+      verdict.style.fontSize = '14px';
     }
   },
 };
