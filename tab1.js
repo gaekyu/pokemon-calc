@@ -71,11 +71,6 @@ const T1 = {
       if (name) T1.onDefPokeSelect(name);
     });
 
-    // 저장 버튼
-    document.getElementById('t1-save-btn').onclick = () => {
-      if (!T1.pokemon) { showToast('포켓몬을 먼저 선택해주세요.', 'error'); return; }
-      openSaveModal('t1');
-    };
   },
 
   onPokeSelect(name) {
