@@ -213,38 +213,41 @@ function getNatureMult(natureName, stat) {
 }
 
 // ===== 도구 =====
-// type: all/physical/special/type_보정(타입명)
-// atkMult: 공격측 결정력 배율
-// defMult: 방어측 내구력 배율
+// atkMult: 공격측 결정력 배율 / speMult: 스피드 배율 / moveType: 적용 조건
 const ITEMS = {
-  "없음":             { atkMult:1, defMult:1, speMult:1,   moveType:null },
-  "구애머리띠":        { atkMult:1.5, defMult:1, speMult:1,   moveType:"physical" },
-  "구애안경":          { atkMult:1.5, defMult:1, speMult:1,   moveType:"special" },
-  "구애스카프":        { atkMult:1,   defMult:1, speMult:1.5, moveType:null },
-  "생명의구슬":        { atkMult:1.3, defMult:1, speMult:1, moveType:"all" },
-  "근육머리띠":        { atkMult:1.1, defMult:1, speMult:1, moveType:"physical" },
-  "박식안경":          { atkMult:1.1, defMult:1, speMult:1, moveType:"special" },
-  "돌격조끼":          { atkMult:1, defMult:1.5, speMult:1, moveType:"special_def" },
-  "진화의휘석":        { atkMult:1, defMult:1.5, speMult:1, moveType:"both_def" },
+  "없음":             { atkMult:1,   defMult:1, speMult:1,   moveType:null },
+  // 구애
+  "구애스카프":       { atkMult:1,   defMult:1, speMult:1.5, moveType:null },
+  // 기타 전투 도구
+  "반짝가루":         { atkMult:1,   defMult:1, speMult:1,   moveType:null },
+  "하양허브":         { atkMult:1,   defMult:1, speMult:1,   moveType:null },
+  "선제공격손톱":     { atkMult:1,   defMult:1, speMult:1,   moveType:null },
+  "멘탈허브":         { atkMult:1,   defMult:1, speMult:1,   moveType:null },
+  "왕의 징표석":      { atkMult:1,   defMult:1, speMult:1,   moveType:null },
+  "기합의 머리띠":    { atkMult:1,   defMult:1, speMult:1,   moveType:null },
+  "초점렌즈":         { atkMult:1,   defMult:1, speMult:1,   moveType:null },
+  "먹다남은 음식":    { atkMult:1,   defMult:1, speMult:1,   moveType:null },
+  "전기구슬":         { atkMult:1,   defMult:1, speMult:1,   moveType:null },
+  "기합의 띠":        { atkMult:1,   defMult:1, speMult:1,   moveType:null },
+  "조개껍질방울":     { atkMult:1,   defMult:1, speMult:1,   moveType:null },
   // 타입강화 (×1.2)
-  "자석(전기)":        { atkMult:1.2, defMult:1, speMult:1, moveType:"전기" },
-  "신비의물방울(물)":  { atkMult:1.2, defMult:1, speMult:1, moveType:"물" },
-  "기적의씨(풀)":      { atkMult:1.2, defMult:1, speMult:1, moveType:"풀" },
-  "차콜(불꽃)":        { atkMult:1.2, defMult:1, speMult:1, moveType:"불꽃" },
-  "흑안경(악)":        { atkMult:1.2, defMult:1, speMult:1, moveType:"악" },
-  "독침바늘(독)":      { atkMult:1.2, defMult:1, speMult:1, moveType:"독" },
-  "날카로운부리(비행)": { atkMult:1.2, defMult:1, speMult:1, moveType:"비행" },
-  "부드러운모래(땅)":  { atkMult:1.2, defMult:1, speMult:1, moveType:"땅" },
-  "단단한돌(바위)":    { atkMult:1.2, defMult:1, speMult:1, moveType:"바위" },
-  "서리뭉치(얼음)":    { atkMult:1.2, defMult:1, speMult:1, moveType:"얼음" },
-  "주먹띠(격투)":      { atkMult:1.2, defMult:1, speMult:1, moveType:"격투" },
-  "금속코트(강철)":    { atkMult:1.2, defMult:1, speMult:1, moveType:"강철" },
-  "용의이빨(드래곤)":  { atkMult:1.2, defMult:1, speMult:1, moveType:"드래곤" },
-  "은빛가루(벌레)":    { atkMult:1.2, defMult:1, speMult:1, moveType:"벌레" },
-  "령의환생(고스트)":  { atkMult:1.2, defMult:1, speMult:1, moveType:"고스트" },
-  "뒤틀린숟가락(에스퍼)":{ atkMult:1.2, defMult:1, speMult:1, moveType:"에스퍼" },
-  "실크스카프(노말)":  { atkMult:1.2, defMult:1, speMult:1, moveType:"노말" },
-  "요정의깃털(페어리)":{ atkMult:1.2, defMult:1, speMult:1, moveType:"페어리" },
+  "자석":             { atkMult:1.2, defMult:1, speMult:1,   moveType:"전기" },
+  "신비의 물방울":    { atkMult:1.2, defMult:1, speMult:1,   moveType:"물" },
+  "기적의 씨":        { atkMult:1.2, defMult:1, speMult:1,   moveType:"풀" },
+  "목탄":             { atkMult:1.2, defMult:1, speMult:1,   moveType:"불꽃" },
+  "검은 안경":        { atkMult:1.2, defMult:1, speMult:1,   moveType:"악" },
+  "독바늘":           { atkMult:1.2, defMult:1, speMult:1,   moveType:"독" },
+  "예리한 부리":      { atkMult:1.2, defMult:1, speMult:1,   moveType:"비행" },
+  "부드러운 모래":    { atkMult:1.2, defMult:1, speMult:1,   moveType:"땅" },
+  "딱딱한 돌":        { atkMult:1.2, defMult:1, speMult:1,   moveType:"바위" },
+  "녹지않는 얼음":    { atkMult:1.2, defMult:1, speMult:1,   moveType:"얼음" },
+  "금속코트":         { atkMult:1.2, defMult:1, speMult:1,   moveType:"강철" },
+  "은빛가루":         { atkMult:1.2, defMult:1, speMult:1,   moveType:"벌레" },
+  "저주의 부적":      { atkMult:1.2, defMult:1, speMult:1,   moveType:"고스트" },
+  "휘어진 스푼":      { atkMult:1.2, defMult:1, speMult:1,   moveType:"에스퍼" },
+  "실크스카프":       { atkMult:1.2, defMult:1, speMult:1,   moveType:"노말" },
+  "요정의 깃털":      { atkMult:1.2, defMult:1, speMult:1,   moveType:"페어리" },
+  "용의 이빨":        { atkMult:1.2, defMult:1, speMult:1,   moveType:"드래곤" },
 };
 const ITEM_NAMES = Object.keys(ITEMS);
 
