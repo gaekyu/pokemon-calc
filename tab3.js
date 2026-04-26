@@ -2,6 +2,7 @@
 
 const T3 = {
   STORAGE_KEY: 'pkmcalc_saves',
+  editingId: null,
 
   init() {
     document.getElementById('t3-add-btn').onclick = () => openSaveModal();
@@ -143,6 +144,7 @@ const T3 = {
           <button class="btn btn-secondary btn-sm" onclick="T3.loadInto(${entry.id},'t1-def')" title="방어측으로 불러오기">🛡️</button>
           <button class="btn btn-secondary btn-sm" onclick="T3.loadInto(${entry.id},'t5-my')" title="스피드로 불러오기">💨</button>
           <button class="btn btn-secondary btn-sm" onclick="T3.loadInto(${entry.id},'t4')" title="역추적으로 불러오기">🔍</button>
+          <button class="btn btn-secondary btn-sm" onclick="T3.editEntry(${entry.id})" style="grid-column:span 2;">✏️ 편집</button>
           <button class="btn btn-danger btn-sm" onclick="T3.confirmDelete(${entry.id})" style="grid-column:span 2;">삭제</button>
         </div>
       </div>`;
@@ -153,6 +155,49 @@ const T3 = {
     if (!entry) return;
     _storagePickTarget = target;
     applyStorageEntry(id);
+  },
+
+  editEntry(id) {
+    const entry = T3.load().find(e => e.id === id);
+    if (!entry) return;
+    T3.editingId = id;
+
+    // 모달 타이틀 변경
+    document.getElementById('modal-title').textContent = '포켓몬 샘플 편집';
+
+    // 포켓몬 채우기
+    document.getElementById('modal-poke-search').value = entry.pokemon || '';
+    document.getElementById('modal-save-name').value   = entry.label   || '';
+    document.getElementById('modal-memo').value        = entry.memo    || '';
+
+    // EV 채우기
+    const evs = entry.evs || {};
+    ['hp','atk','def','spa','spd','spe'].forEach(s => {
+      const v = evs[s] || 0;
+      document.getElementById(`modal-ev-${s}`).value     = v;
+      document.getElementById(`modal-ev-${s}-num`).value = v;
+    });
+
+    // 기술 채우기
+    const moves = entry.moves || [];
+    [1,2,3,4].forEach((_, i) => {
+      document.getElementById(`modal-move${i+1}-search`).value = moves[i] ? moves[i].name : '';
+    });
+
+    // 성격 / 특성 / 도구
+    if (entry.nature) {
+      document.getElementById('modal-nature').value = entry.nature;
+      updateNaturePickerDisplay('modal-nature');
+    }
+    if (entry.ability) document.getElementById('modal-ability').value = entry.ability;
+    if (entry.item)    document.getElementById('modal-item').value    = entry.item;
+
+    // 이미지 + 폼
+    const poke = POKEMON_MAP[entry.pokemon];
+    if (poke) { showPokeImage('modal-poke-img', poke); fillFormSelect('modal-poke-form', entry.pokemon); }
+    else document.getElementById('modal-poke-img').style.display = 'none';
+
+    document.getElementById('save-modal').classList.add('open');
   },
 
   confirmDelete(id) {
@@ -178,24 +223,40 @@ const T3 = {
       return { name, power: md ? md.power : 0 };
     }).filter(Boolean);
 
-    T3.addEntry({
-      source: 'tab3',
-      pokemon,
-      label,
-      evs,
+    const data = {
+      source: 'tab3', pokemon, label, evs,
       nature:  document.getElementById('modal-nature').value,
       ability: document.getElementById('modal-ability').value,
       item:    document.getElementById('modal-item').value,
       moves,
       memo:    document.getElementById('modal-memo').value.trim(),
-    });
-    closeModal();
-    showToast('저장됐어요!', 'success');
+    };
+
+    if (T3.editingId) {
+      // 기존 항목 수정 (id·createdAt 유지)
+      const list = T3.load();
+      const idx  = list.findIndex(e => e.id === T3.editingId);
+      if (idx !== -1) {
+        list[idx] = { ...list[idx], ...data };
+        T3.save(list);
+        T3.render();
+      }
+      T3.editingId = null;
+      closeModal();
+      showToast('수정됐어요!', 'success');
+    } else {
+      T3.addEntry(data);
+      closeModal();
+      showToast('저장됐어요!', 'success');
+    }
   },
 };
 
 // ===== 모달 유틸 =====
 function openSaveModal() {
+  T3.editingId = null;
+  document.getElementById('modal-title').textContent = '포켓몬 샘플 저장';
+
   // 폼 리셋
   document.getElementById('modal-poke-search').value = '';
   document.getElementById('modal-save-name').value = '';
@@ -210,6 +271,8 @@ function openSaveModal() {
 }
 
 function closeModal() {
+  T3.editingId = null;
+  document.getElementById('modal-title').textContent = '포켓몬 샘플 저장';
   document.getElementById('save-modal').classList.remove('open');
 }
 
