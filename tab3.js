@@ -25,15 +25,39 @@ const T3 = {
       if (poke) showPokeImage('modal-poke-img', poke);
     });
 
-    // 노력치 슬라이더 ↔ 숫자 연동
-    ['hp','atk','def','spa','spd','spe'].forEach(stat => {
+    // 노력치 슬라이더 ↔ 숫자 연동 (합계 66 제한)
+    const EV_STATS = ['hp','atk','def','spa','spd','spe'];
+
+    function getEvOtherSum(excludeStat) {
+      return EV_STATS.filter(s => s !== excludeStat)
+        .reduce((sum, s) => sum + (parseInt(document.getElementById(`modal-ev-${s}`).value) || 0), 0);
+    }
+
+    function updateEvTotal() {
+      const total = EV_STATS.reduce((sum, s) =>
+        sum + (parseInt(document.getElementById(`modal-ev-${s}`).value) || 0), 0);
+      const el = document.getElementById('modal-ev-total');
+      if (!el) return;
+      el.textContent = `합계: ${total} / 66`;
+      el.style.color = total >= 66 ? 'var(--warning)' : 'var(--text-dim)';
+    }
+
+    EV_STATS.forEach(stat => {
       const range = document.getElementById(`modal-ev-${stat}`);
       const num   = document.getElementById(`modal-ev-${stat}-num`);
       if (!range || !num) return;
-      range.addEventListener('input', () => { num.value = range.value; });
+
+      const clamp = v => Math.max(0, Math.min(32, Math.min(66 - getEvOtherSum(stat), v)));
+
+      range.addEventListener('input', () => {
+        const v = clamp(parseInt(range.value) || 0);
+        range.value = v; num.value = v;
+        updateEvTotal();
+      });
       num.addEventListener('input', () => {
-        let v = Math.max(0, Math.min(66, parseInt(num.value) || 0));
+        const v = clamp(parseInt(num.value) || 0);
         num.value = v; range.value = v;
+        updateEvTotal();
       });
     });
 
@@ -91,7 +115,7 @@ const T3 = {
     const EV_LABELS = [['HP','hp'],['공격','atk'],['방어','def'],['특공','spa'],['특방','spd'],['스피드','spe']];
     const evBars = EV_LABELS.map(([label, key]) => {
       const val = evs[key] || 0;
-      const pct = Math.round((val / 66) * 100);
+      const pct = Math.round((val / 32) * 100);
       return `<div class="ev-bar-row">
         <span class="ev-bar-label">${label}</span>
         <div class="ev-bar-track"><div class="ev-bar-fill${val===0?' zero':''}" style="width:${pct}%"></div></div>
@@ -177,6 +201,9 @@ const T3 = {
       document.getElementById(`modal-ev-${s}`).value     = v;
       document.getElementById(`modal-ev-${s}-num`).value = v;
     });
+    const totalEv = ['hp','atk','def','spa','spd','spe'].reduce((sum, s) => sum + (evs[s] || 0), 0);
+    const totalEl = document.getElementById('modal-ev-total');
+    if (totalEl) { totalEl.textContent = `합계: ${totalEv} / 66`; totalEl.style.color = totalEv >= 66 ? 'var(--warning)' : 'var(--text-dim)'; }
 
     // 기술 채우기
     const moves = entry.moves || [];
@@ -266,6 +293,8 @@ function openSaveModal() {
     document.getElementById(`modal-ev-${s}`).value = 0;
     document.getElementById(`modal-ev-${s}-num`).value = 0;
   });
+  const totalEl = document.getElementById('modal-ev-total');
+  if (totalEl) { totalEl.textContent = '합계: 0 / 66'; totalEl.style.color = 'var(--text-dim)'; }
   [1,2,3,4].forEach(i => { document.getElementById(`modal-move${i}-search`).value = ''; });
   document.getElementById('save-modal').classList.add('open');
 }

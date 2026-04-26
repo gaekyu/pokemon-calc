@@ -2,7 +2,7 @@
 // 포챔스 공식: EV × 2 적용, Lv50, 개체값 31 고정
 
 function calcStat(base, ev, isHp, natureMult) {
-  ev = Math.max(0, Math.min(66, ev || 0));
+  ev = Math.max(0, Math.min(32, ev || 0));
   if (isHp) {
     return Math.floor((2 * base + 31 + ev) * 50 / 100) + 60;
   } else {
