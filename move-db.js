@@ -1,0 +1,339 @@
+// 기술 DB: [name, type, category(물리/특수/변화), power, tags[]]
+// tags: punch, bite, pulse, recoil, sound
+const RAW_MOVES = [
+// 노말
+["하이퍼빔","노말","특수",150,[]],
+["기간트임팩트","노말","물리",150,[]],
+["신속","노말","물리",80,[]],
+["더블엣지","노말","물리",120,["recoil"]],
+["바디슬램","노말","물리",85,[]],
+["큰소리","노말","특수",90,["sound"]],
+["붐버스트","노말","특수",140,["sound"]],
+["대폭발","노말","물리",250,[]],
+["자폭","노말","물리",200,[]],
+["스위프슬랩","노말","물리",25,[]],
+["리턴","노말","물리",102,[]],
+// 불꽃
+["불꽃방사","불꽃","특수",90,[]],
+["불대문자","불꽃","특수",110,[]],
+["오버히트","불꽃","특수",130,[]],
+["열풍","불꽃","특수",95,[]],
+["불꽃펀치","불꽃","물리",75,["punch"]],
+["불대쉬","불꽃","물리",120,["recoil"]],
+["화염바퀴","불꽃","물리",60,[]],
+["불꽃세례","불꽃","물리",100,[]],
+["불꽃소용돌이","불꽃","특수",35,[]],
+["불꽃놀이","불꽃","특수",120,[]],
+// 물
+["파도타기","물","특수",90,[]],
+["하이드로펌프","물","특수",110,[]],
+["열탕","물","특수",80,[]],
+["아쿠아테일","물","물리",90,[]],
+["폭포오르기","물","물리",80,[]],
+["웨이브크래시","물","물리",120,["recoil"]],
+["아쿠아제트","물","물리",40,[]],
+["다이브","물","물리",80,[]],
+["플립턴","물","물리",60,[]],
+["하이드로스팀","물","특수",80,[]],
+// 전기
+["10만볼트","전기","특수",90,[]],
+["번개","전기","특수",110,[]],
+["번개펀치","전기","물리",75,["punch"]],
+["와일드볼트","전기","물리",90,["recoil"]],
+["방전","전기","특수",80,[]],
+["볼트체인지","전기","특수",70,[]],
+["스파크","전기","물리",65,[]],
+["전기자석파","전기","변화",0,[]],
+// 풀
+["잎날가르기","풀","물리",90,[]],
+["에너지볼","풀","특수",90,[]],
+["기가드레인","풀","특수",75,[]],
+["잎새폭풍","풀","특수",130,[]],
+["씨폭탄","풀","물리",80,[]],
+["파워휩","풀","물리",120,[]],
+["우드해머","풀","물리",120,["recoil"]],
+["솔라빔","풀","특수",120,[]],
+["풀묶기","풀","특수",0,[]],
+["매지컬샤인","풀","특수",80,[]],
+// 얼음
+["냉동빔","얼음","특수",90,[]],
+["눈보라","얼음","특수",110,[]],
+["냉동펀치","얼음","물리",75,["punch"]],
+["아이스해머","얼음","물리",100,["punch"]],
+["아이스스피너","얼음","물리",80,[]],
+["얼음뭉치","얼음","물리",30,[]],
+["눈사태","얼음","물리",75,[]],
+["아이시클크래시","얼음","물리",85,[]],
+// 격투
+["인파이트","격투","물리",120,[]],
+["슈퍼파워","격투","물리",120,[]],
+["드레인펀치","격투","물리",75,["punch"]],
+["하이점프킥","격투","물리",130,[]],
+["크로스촙","격투","물리",100,[]],
+["기합구슬","격투","특수",120,[]],
+["번뜩이는엄지","격투","물리",40,["punch"]],
+["머신펀치","격투","물리",80,["punch"]],
+["스카이어퍼컷","격투","물리",85,[]],
+["파워업펀치","격투","물리",40,["punch"]],
+// 독
+["오물웨이브","독","특수",95,[]],
+["오물폭탄","독","특수",90,[]],
+["독찌르기","독","물리",80,[]],
+["크로스포이즌","독","물리",70,[]],
+["산성폭탄","독","특수",40,[]],
+["독침","독","물리",15,[]],
+// 땅
+["지진","땅","물리",100,[]],
+["대지의힘","땅","특수",90,[]],
+["구멍파기","땅","물리",80,[]],
+["진흙폭탄","땅","특수",65,[]],
+["땅고르기","땅","물리",60,[]],
+["모래무덤","땅","물리",35,[]],
+["스톤엣지(땅은아님)","바위","물리",100,[]],
+// 비행
+["에어슬래시","비행","특수",75,[]],
+["브레이브버드","비행","물리",120,["recoil"]],
+["허리케인","비행","특수",110,[]],
+["공중날기","비행","물리",80,[]],
+["에어커터","비행","특수",60,[]],
+["날개치기","비행","물리",60,[]],
+["더블윙","비행","물리",40,[]],
+// 에스퍼
+["사이코키네시스","에스퍼","특수",90,[]],
+["사이코쇼크","에스퍼","특수",80,[]],
+["미래예지","에스퍼","특수",120,[]],
+["불가사의힘","에스퍼","특수",70,[]],
+["사이코팡","에스퍼","물리",90,["bite"]],
+["확대피스톤","에스퍼","물리",80,["punch"]],
+// 벌레
+["벌레의야단법석","벌레","특수",90,["sound"]],
+["X시저","벌레","물리",80,[]],
+["유턴","벌레","물리",70,[]],
+["버그바이트","벌레","물리",60,["bite"]],
+["메가폰","벌레","물리",100,[]],
+// 바위
+["스톤엣지","바위","물리",100,[]],
+["바위굴리기","바위","물리",75,[]],
+["록블래스트","바위","물리",25,[]],
+["파워젬","바위","특수",80,[]],
+["스테루스암","바위","변화",0,[]],
+// 고스트
+["섀도볼","고스트","특수",80,[]],
+["섀도클로","고스트","물리",70,[]],
+["팬텀포스","고스트","물리",90,[]],
+["고스트다이브","고스트","물리",100,[]],
+["섀도스트라이크","고스트","물리",80,[]],
+["저주받은바디","고스트","변화",0,[]],
+// 드래곤
+["역린","드래곤","물리",120,[]],
+["드래곤클로","드래곤","물리",80,[]],
+["드래곤펄스","드래곤","특수",85,["pulse"]],
+["용의파동","드래곤","특수",130,[]],
+["드래곤다이브","드래곤","물리",100,[]],
+["용의화살","드래곤","물리",50,[]],
+["아웃레이지","드래곤","물리",120,[]],
+// 악
+["어둠의파동","악","특수",80,["pulse"]],
+["악의파동","악","물리",95,[]],
+["탁쳐서떨구기","악","물리",65,[]],
+["이판사판","악","물리",70,[]],
+["씹어뜯기","악","물리",60,["bite"]],
+["나이트슬래시","악","물리",70,[]],
+["파멸의소원","악","특수",140,[]],
+// 강철
+["아이언헤드","강철","물리",80,[]],
+["플래시캐논","강철","특수",80,["pulse"]],
+["불릿펀치","강철","물리",40,["punch"]],
+["메테오드라이브","강철","물리",100,["punch"]],
+["성스러운칼","강철","물리",90,[]],
+["자이로볼","강철","물리",0,[]],
+["스마트스트라이크","강철","물리",70,[]],
+["헤비슬램","강철","물리",0,[]],
+["아이언롤러","강철","물리",130,[]],
+// 페어리
+["문블래스트","페어리","특수",95,[]],
+["플레이러프","페어리","물리",90,[]],
+["드레인키스","페어리","특수",50,[]],
+["스피릿브레이크","페어리","물리",75,[]],
+["눈부신빛","페어리","특수",80,[]],
+["매혹적인보이스","페어리","특수",40,["sound"]],
+["도깨비불","페어리","특수",65,[]],
+["문포스","페어리","특수",95,[]],
+];
+
+const MOVE_DB = RAW_MOVES.map(m => ({
+  name: m[0], type: m[1], cat: m[2], power: m[3], tags: m[4]
+}));
+
+const MOVE_MAP = {};
+MOVE_DB.forEach(m => { MOVE_MAP[m.name] = m; });
+const MOVE_NAMES = MOVE_DB.map(m => m.name);
+
+// ===== 성격 =====
+// { stat: multiplier }  stat: atk/def/spa/spd/spe
+const NATURES = {
+  // ===== 무보정 (5종) =====
+  "노력(무보정)":    {},
+  "온순(무보정)":    {},
+  "수줍음(무보정)":  {},
+  "변덕(무보정)":    {},
+  "성실(무보정)":    {},
+  // ===== 공격 상승 =====
+  "외로움(공격↑방어↓)":    { atk:1.1, def:0.9 },
+  "고집(공격↑특공↓)":      { atk:1.1, spa:0.9 },
+  "개구쟁이(공격↑특방↓)":  { atk:1.1, spd:0.9 },
+  "용감(공격↑스피드↓)":    { atk:1.1, spe:0.9 },
+  // ===== 방어 상승 =====
+  "대담(방어↑공격↓)":      { def:1.1, atk:0.9 },
+  "장난꾸러기(방어↑특공↓)":{ def:1.1, spa:0.9 },
+  "촐랑(방어↑특방↓)":      { def:1.1, spd:0.9 },
+  "무사태평(방어↑스피드↓)":{ def:1.1, spe:0.9 },
+  // ===== 특공 상승 =====
+  "조심(특공↑공격↓)":      { spa:1.1, atk:0.9 },
+  "의젓(특공↑방어↓)":      { spa:1.1, def:0.9 },
+  "덜렁(특공↑특방↓)":      { spa:1.1, spd:0.9 },
+  "냉정(특공↑스피드↓)":    { spa:1.1, spe:0.9 },
+  // ===== 특방 상승 =====
+  "차분(특방↑공격↓)":      { spd:1.1, atk:0.9 },
+  "얌전(특방↑방어↓)":      { spd:1.1, def:0.9 },
+  "신중(특방↑특공↓)":      { spd:1.1, spa:0.9 },
+  "건방(특방↑스피드↓)":    { spd:1.1, spe:0.9 },
+  // ===== 스피드 상승 =====
+  "겁쟁이(스피드↑공격↓)":  { spe:1.1, atk:0.9 },
+  "성급(스피드↑방어↓)":    { spe:1.1, def:0.9 },
+  "명랑(스피드↑특공↓)":    { spe:1.1, spa:0.9 },
+  "천진난만(스피드↑특방↓)":{ spe:1.1, spd:0.9 },
+};
+const NATURE_NAMES = Object.keys(NATURES);
+
+function getNatureMult(natureName, stat) {
+  const n = NATURES[natureName];
+  if (!n) return 1;
+  return n[stat] || 1;
+}
+
+// ===== 도구 =====
+// type: all/physical/special/type_보정(타입명)
+// atkMult: 공격측 결정력 배율
+// defMult: 방어측 내구력 배율
+const ITEMS = {
+  "없음":             { atkMult:1, defMult:1, speMult:1,   moveType:null },
+  "구애머리띠":        { atkMult:1.5, defMult:1, speMult:1,   moveType:"physical" },
+  "구애안경":          { atkMult:1.5, defMult:1, speMult:1,   moveType:"special" },
+  "구애스카프":        { atkMult:1,   defMult:1, speMult:1.5, moveType:null },
+  "생명의구슬":        { atkMult:1.3, defMult:1, speMult:1, moveType:"all" },
+  "근육머리띠":        { atkMult:1.1, defMult:1, speMult:1, moveType:"physical" },
+  "박식안경":          { atkMult:1.1, defMult:1, speMult:1, moveType:"special" },
+  "돌격조끼":          { atkMult:1, defMult:1.5, speMult:1, moveType:"special_def" },
+  "진화의휘석":        { atkMult:1, defMult:1.5, speMult:1, moveType:"both_def" },
+  // 타입강화 (×1.2)
+  "자석(전기)":        { atkMult:1.2, defMult:1, speMult:1, moveType:"전기" },
+  "신비의물방울(물)":  { atkMult:1.2, defMult:1, speMult:1, moveType:"물" },
+  "기적의씨(풀)":      { atkMult:1.2, defMult:1, speMult:1, moveType:"풀" },
+  "차콜(불꽃)":        { atkMult:1.2, defMult:1, speMult:1, moveType:"불꽃" },
+  "흑안경(악)":        { atkMult:1.2, defMult:1, speMult:1, moveType:"악" },
+  "독침바늘(독)":      { atkMult:1.2, defMult:1, speMult:1, moveType:"독" },
+  "날카로운부리(비행)": { atkMult:1.2, defMult:1, speMult:1, moveType:"비행" },
+  "부드러운모래(땅)":  { atkMult:1.2, defMult:1, speMult:1, moveType:"땅" },
+  "단단한돌(바위)":    { atkMult:1.2, defMult:1, speMult:1, moveType:"바위" },
+  "서리뭉치(얼음)":    { atkMult:1.2, defMult:1, speMult:1, moveType:"얼음" },
+  "주먹띠(격투)":      { atkMult:1.2, defMult:1, speMult:1, moveType:"격투" },
+  "금속코트(강철)":    { atkMult:1.2, defMult:1, speMult:1, moveType:"강철" },
+  "용의이빨(드래곤)":  { atkMult:1.2, defMult:1, speMult:1, moveType:"드래곤" },
+  "은빛가루(벌레)":    { atkMult:1.2, defMult:1, speMult:1, moveType:"벌레" },
+  "령의환생(고스트)":  { atkMult:1.2, defMult:1, speMult:1, moveType:"고스트" },
+  "뒤틀린숟가락(에스퍼)":{ atkMult:1.2, defMult:1, speMult:1, moveType:"에스퍼" },
+  "실크스카프(노말)":  { atkMult:1.2, defMult:1, speMult:1, moveType:"노말" },
+  "요정의깃털(페어리)":{ atkMult:1.2, defMult:1, speMult:1, moveType:"페어리" },
+};
+const ITEM_NAMES = Object.keys(ITEMS);
+
+function getItemMult(itemName, moveCat, moveType) {
+  const item = ITEMS[itemName];
+  if (!item || item.atkMult === 1) return 1;
+  const t = item.moveType;
+  if (t === "all") return item.atkMult;
+  if (t === "physical" && moveCat === "물리") return item.atkMult;
+  if (t === "special"  && moveCat === "특수") return item.atkMult;
+  if (t === moveType) return item.atkMult;
+  return 1;
+}
+
+function getItemSpeMult(itemName) {
+  const item = ITEMS[itemName];
+  if (!item) return 1;
+  return item.speMult || 1;
+}
+
+function getItemDefMult(itemName, defStat) {
+  // defStat: 'def' or 'spd'
+  const item = ITEMS[itemName];
+  if (!item) return 1;
+  if (item.moveType === "both_def") return item.defMult;
+  if (item.moveType === "special_def" && defStat === "spd") return item.defMult;
+  return 1;
+}
+
+// ===== 날씨 배율 =====
+function getWeatherMult(weather, moveType) {
+  if (weather === "sun") {
+    if (moveType === "불꽃") return 1.5;
+    if (moveType === "물")   return 0.5;
+  }
+  if (weather === "rain") {
+    if (moveType === "물")   return 1.5;
+    if (moveType === "불꽃") return 0.5;
+  }
+  return 1;
+}
+
+// ===== 특성 =====
+const ABILITIES = {
+  "없음":        { mult:1, condition:"none" },
+  "순수한힘":    { mult:2.0, condition:"always_atk" },
+  "자기과신":    { mult:1.5, condition:"physical" },
+  "기술숙련":    { mult:1.5, condition:"power_le60" },
+  "불굴의마음":  { mult:1.3, condition:"secondary" },
+  "적응력":      { mult:2.0, condition:"stab_override" },
+  "무모한행동":  { mult:1.2, condition:"recoil" },
+  "메가런처":    { mult:1.5, condition:"pulse" },
+  "강인한턱":    { mult:1.5, condition:"bite" },
+  "철주먹":      { mult:1.2, condition:"punch" },
+  "과학력":      { mult:1.3, condition:"moves_last" },
+  "맹화(HP낮을때)": { mult:1.5, condition:"fire_low_hp" },
+  "폭류(HP낮을때)": { mult:1.5, condition:"water_low_hp" },
+  "무성(HP낮을때)": { mult:1.5, condition:"grass_low_hp" },
+  "벌레알림(HP낮을때)": { mult:1.5, condition:"bug_low_hp" },
+  "필터/상성갑옷(방어측)": { mult:0.75, condition:"filter" },
+};
+const ABILITY_NAMES = Object.keys(ABILITIES);
+
+function getAbilityMult(abilityName, move, isSTAB) {
+  const ab = ABILITIES[abilityName];
+  if (!ab || ab.mult === 1) return { mult:1, stabOverride:false };
+  const c = ab.condition;
+  const m = move || {};
+  if (c === "always_atk") return { mult:ab.mult, stabOverride:false };
+  if (c === "physical"   && m.cat === "물리") return { mult:ab.mult, stabOverride:false };
+  if (c === "power_le60" && m.power > 0 && m.power <= 60) return { mult:ab.mult, stabOverride:false };
+  if (c === "secondary")  return { mult:ab.mult, stabOverride:false };  // user decides
+  if (c === "stab_override" && isSTAB) return { mult:1, stabOverride:true };
+  if (c === "recoil"  && m.tags && m.tags.includes("recoil")) return { mult:ab.mult, stabOverride:false };
+  if (c === "pulse"   && m.tags && m.tags.includes("pulse"))  return { mult:ab.mult, stabOverride:false };
+  if (c === "bite"    && m.tags && m.tags.includes("bite"))   return { mult:ab.mult, stabOverride:false };
+  if (c === "punch"   && m.tags && m.tags.includes("punch"))  return { mult:ab.mult, stabOverride:false };
+  if (c === "moves_last") return { mult:ab.mult, stabOverride:false };
+  if (c === "fire_low_hp"  && m.type === "불꽃") return { mult:ab.mult, stabOverride:false };
+  if (c === "water_low_hp" && m.type === "물")   return { mult:ab.mult, stabOverride:false };
+  if (c === "grass_low_hp" && m.type === "풀")   return { mult:ab.mult, stabOverride:false };
+  if (c === "bug_low_hp"   && m.type === "벌레") return { mult:ab.mult, stabOverride:false };
+  return { mult:1, stabOverride:false };
+}
+
+// ===== 랭크 배율 =====
+const RANK_MULTS = {
+  "-6":0.25, "-5":2/7, "-4":1/3, "-3":0.4, "-2":0.5, "-1":2/3,
+  "0":1,
+  "1":1.5, "2":2, "3":2.5, "4":3, "5":3.5, "6":4
+};
+function getRankMult(rank) { return RANK_MULTS[String(rank)] || 1; }
