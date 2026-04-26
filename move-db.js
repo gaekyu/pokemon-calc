@@ -292,22 +292,22 @@ function getWeatherMult(weather, moveType) {
 
 // ===== 특성 =====
 const ABILITIES = {
-  "없음":        { mult:1, condition:"none" },
-  "순수한힘":    { mult:2.0, condition:"always_atk" },
-  "자기과신":    { mult:1.5, condition:"physical" },
-  "기술숙련":    { mult:1.5, condition:"power_le60" },
-  "불굴의마음":  { mult:1.3, condition:"secondary" },
-  "적응력":      { mult:2.0, condition:"stab_override" },
-  "무모한행동":  { mult:1.2, condition:"recoil" },
-  "메가런처":    { mult:1.5, condition:"pulse" },
-  "강인한턱":    { mult:1.5, condition:"bite" },
-  "철주먹":      { mult:1.2, condition:"punch" },
-  "과학력":      { mult:1.3, condition:"moves_last" },
-  "맹화(HP낮을때)": { mult:1.5, condition:"fire_low_hp" },
-  "폭류(HP낮을때)": { mult:1.5, condition:"water_low_hp" },
-  "무성(HP낮을때)": { mult:1.5, condition:"grass_low_hp" },
-  "벌레알림(HP낮을때)": { mult:1.5, condition:"bug_low_hp" },
-  "필터/상성갑옷(방어측)": { mult:0.75, condition:"filter" },
+  "없음":           { mult:1,    condition:"none" },
+  "순수한힘":       { mult:2.0,  condition:"always_atk" },
+  "테크니션":       { mult:1.5,  condition:"power_le60" },
+  "자기과신":       { mult:1.3,  condition:"secondary" },   // 추가효과 있는 기술 ×1.3
+  "적응력":         { mult:2.0,  condition:"stab_override" },
+  "이판사판":       { mult:1.2,  condition:"recoil" },      // 반동기술 ×1.2
+  "메가런처":       { mult:1.5,  condition:"pulse" },
+  "강인한턱":       { mult:1.5,  condition:"bite" },
+  "철주먹":         { mult:1.2,  condition:"punch" },
+  "단단한 발톱":    { mult:1.3,  condition:"contact" },     // 접촉기술(물리) ×1.3
+  "과학력":         { mult:1.3,  condition:"moves_last" },
+  "맹화(HP낮을때)": { mult:1.5,  condition:"fire_low_hp" },
+  "급류":           { mult:1.5,  condition:"water_low_hp" },
+  "심록":           { mult:1.5,  condition:"grass_low_hp" },
+  "벌레의 알림":    { mult:1.5,  condition:"bug_low_hp" },
+  "하드록":         { mult:0.75, condition:"filter" },
 };
 const ABILITY_NAMES = Object.keys(ABILITIES);
 
@@ -317,9 +317,9 @@ function getAbilityMult(abilityName, move, isSTAB) {
   const c = ab.condition;
   const m = move || {};
   if (c === "always_atk") return { mult:ab.mult, stabOverride:false };
-  if (c === "physical"   && m.cat === "물리") return { mult:ab.mult, stabOverride:false };
+  if (c === "contact"    && m.cat === "물리") return { mult:ab.mult, stabOverride:false };
   if (c === "power_le60" && m.power > 0 && m.power <= 60) return { mult:ab.mult, stabOverride:false };
-  if (c === "secondary")  return { mult:ab.mult, stabOverride:false };  // user decides
+  if (c === "secondary")  return { mult:ab.mult, stabOverride:false };  // 사용자가 추가효과 여부 판단
   if (c === "stab_override" && isSTAB) return { mult:1, stabOverride:true };
   if (c === "recoil"  && m.tags && m.tags.includes("recoil")) return { mult:ab.mult, stabOverride:false };
   if (c === "pulse"   && m.tags && m.tags.includes("pulse"))  return { mult:ab.mult, stabOverride:false };
