@@ -31,7 +31,7 @@ const T3 = {
       if (!range || !num) return;
       range.addEventListener('input', () => { num.value = range.value; });
       num.addEventListener('input', () => {
-        let v = Math.max(0, Math.min(32, parseInt(num.value) || 0));
+        let v = Math.max(0, Math.min(66, parseInt(num.value) || 0));
         num.value = v; range.value = v;
       });
     });
@@ -90,7 +90,7 @@ const T3 = {
     const EV_LABELS = [['HP','hp'],['공격','atk'],['방어','def'],['특공','spa'],['특방','spd'],['스피드','spe']];
     const evBars = EV_LABELS.map(([label, key]) => {
       const val = evs[key] || 0;
-      const pct = Math.round((val / 32) * 100);
+      const pct = Math.round((val / 66) * 100);
       return `<div class="ev-bar-row">
         <span class="ev-bar-label">${label}</span>
         <div class="ev-bar-track"><div class="ev-bar-fill${val===0?' zero':''}" style="width:${pct}%"></div></div>
@@ -128,26 +128,22 @@ const T3 = {
 
     return `
       <div class="save-card" data-id="${entry.id}">
-        <div class="save-card-body">
-          <img src="${spriteUrl}" class="save-card-sprite" onerror="this.style.display='none'" alt="">
-          <div class="save-card-right">
-            <div class="save-card-name">${entry.label || entry.pokemon || '이름 없음'}</div>
-            <div class="save-card-meta">${entry.pokemon||''} · ${entry.createdAt||''}</div>
-            <div style="font-size:11px; color:var(--text-dim); margin:4px 0;">
-              성격: <b>${natureName}</b> · 특성: ${entry.ability||'—'} · 도구: ${entry.item||'없음'}
-            </div>
-            ${movesHtml ? `<div class="save-card-moves">${movesHtml}</div>` : ''}
-            ${bulkHtml}
-            ${entry.memo ? `<div class="save-card-memo">${escapeHtml(entry.memo)}</div>` : ''}
-          </div>
+        <img src="${spriteUrl}" class="save-card-sprite" onerror="this.style.display='none'" alt="">
+        <div class="save-card-name" title="${entry.label || entry.pokemon || ''}">${entry.label || entry.pokemon || '이름 없음'}</div>
+        <div class="save-card-meta">${entry.pokemon||''}</div>
+        <div style="font-size:10px; color:var(--text-dim); text-align:center; margin-bottom:3px;">
+          <b>${natureName}</b> · ${entry.item||'없음'}
         </div>
+        ${movesHtml ? `<div class="save-card-moves">${movesHtml}</div>` : ''}
         <div class="ev-bars">${evBars}</div>
+        ${bulkHtml}
+        ${entry.memo ? `<div class="save-card-memo">${escapeHtml(entry.memo)}</div>` : ''}
         <div class="save-card-actions">
-          <button class="btn btn-secondary btn-sm" onclick="T3.loadInto(${entry.id},'t1-atk')">⚔️ 공격측</button>
-          <button class="btn btn-secondary btn-sm" onclick="T3.loadInto(${entry.id},'t1-def')">🛡️ 방어측</button>
-          <button class="btn btn-secondary btn-sm" onclick="T3.loadInto(${entry.id},'t5-my')">💨 스피드</button>
-          <button class="btn btn-secondary btn-sm" onclick="T3.loadInto(${entry.id},'t4')">🔍 역추적</button>
-          <button class="btn btn-danger btn-sm" onclick="T3.confirmDelete(${entry.id})">삭제</button>
+          <button class="btn btn-secondary btn-sm" onclick="T3.loadInto(${entry.id},'t1-atk')" title="공격측으로 불러오기">⚔️</button>
+          <button class="btn btn-secondary btn-sm" onclick="T3.loadInto(${entry.id},'t1-def')" title="방어측으로 불러오기">🛡️</button>
+          <button class="btn btn-secondary btn-sm" onclick="T3.loadInto(${entry.id},'t5-my')" title="스피드로 불러오기">💨</button>
+          <button class="btn btn-secondary btn-sm" onclick="T3.loadInto(${entry.id},'t4')" title="역추적으로 불러오기">🔍</button>
+          <button class="btn btn-danger btn-sm" onclick="T3.confirmDelete(${entry.id})" style="grid-column:span 2;">삭제</button>
         </div>
       </div>`;
   },

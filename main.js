@@ -284,7 +284,7 @@ function linkSliderNum(rangeId, valId, numId, onChange) {
     if (onChange) onChange();
   });
   num.addEventListener('input', () => {
-    let v = Math.max(0, Math.min(32, parseInt(num.value) || 0));
+    let v = Math.max(0, Math.min(66, parseInt(num.value) || 0));
     num.value = v;
     range.value = v;
     val.textContent = v;
