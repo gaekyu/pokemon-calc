@@ -109,6 +109,28 @@ body {
   .two-col, .three-col { grid-template-columns: 1fr; }
 }
 
+/* ===== 좌우 분할 레이아웃 (결정력 탭) ===== */
+.side-layout {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  align-items: start;
+}
+.side-col { display: flex; flex-direction: column; gap: 12px; }
+.side-col-title {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  padding: 0 2px 4px;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 4px;
+}
+@media (max-width: 720px) {
+  .side-layout { grid-template-columns: 1fr; }
+}
+
 /* ===== 카드 ===== */
 .card {
   background: var(--surface);
@@ -601,225 +623,238 @@ textarea { resize: vertical; min-height: 60px; }
 
 <!-- ======================== TAB 1: 결정력 ======================== -->
 <div id="tab1" class="tab-content active">
-  <div class="calc-container">
+  <div class="calc-container" style="max-width:1100px;">
 
-    <!-- 포켓몬 선택 -->
-    <div class="card">
-      <div class="card-title">공격 포켓몬</div>
-      <div class="two-col">
-        <div class="form-group">
-          <label class="form-label">포켓몬</label>
-          <div class="search-select-wrap" id="t1-poke-wrap">
-            <input type="text" id="t1-poke-search" placeholder="이름 검색..." autocomplete="off">
-            <div class="dropdown-list hidden" id="t1-poke-list"></div>
-          </div>
-        </div>
-        <div class="form-group">
-          <label class="form-label">폼</label>
-          <select id="t1-poke-form"></select>
-        </div>
-      </div>
-      <!-- 포켓몬 정보 표시 -->
-      <div id="t1-poke-info" style="display:none; margin-top:8px;">
-        <div style="display:flex; gap:12px; align-items:center;">
-          <img id="t1-poke-img" class="poke-img" src="" alt="">
-          <div>
-            <div style="display:flex; gap:6px; align-items:center; flex-wrap:wrap; margin-bottom:4px;">
-              <span id="t1-poke-types"></span>
+    <div class="side-layout">
+
+      <!-- ========== 왼쪽: 공격 측 ========== -->
+      <div class="side-col">
+        <div class="side-col-title">⚔️ 공격 포켓몬</div>
+
+        <!-- 포켓몬 선택 -->
+        <div class="card">
+          <div class="card-title">포켓몬</div>
+          <div class="two-col">
+            <div class="form-group">
+              <label class="form-label">이름 검색</label>
+              <div class="search-select-wrap" id="t1-poke-wrap">
+                <input type="text" id="t1-poke-search" placeholder="이름 검색..." autocomplete="off">
+                <div class="dropdown-list hidden" id="t1-poke-list"></div>
+              </div>
             </div>
-            <div style="font-size:12px; color:var(--text-dim);">
-              기본 공격/특공: <span id="t1-base-stats" style="color:var(--accent2); font-weight:700;"></span>
+            <div class="form-group">
+              <label class="form-label">폼</label>
+              <select id="t1-poke-form"></select>
             </div>
           </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- 기술 선택 -->
-    <div class="card">
-      <div class="card-title">기술</div>
-      <div class="two-col">
-        <div class="form-group">
-          <label class="form-label">기술 이름</label>
-          <div class="search-select-wrap" id="t1-move-wrap">
-            <input type="text" id="t1-move-search" placeholder="기술 검색..." autocomplete="off">
-            <div class="dropdown-list hidden" id="t1-move-list"></div>
-          </div>
-        </div>
-        <div class="form-group">
-          <label class="form-label">기술 위력 (직접 입력 가능)</label>
-          <input type="number" id="t1-move-power" placeholder="위력" min="1" max="300" value="">
-        </div>
-      </div>
-      <div id="t1-move-info" style="display:none; margin-top:6px;">
-        <div style="display:flex; gap:6px; align-items:center; flex-wrap:wrap;">
-          <span id="t1-move-type-badge"></span>
-          <span id="t1-move-cat-badge"></span>
-          <span id="t1-stab-badge" class="stab-active" style="display:none;">자속 ×1.5</span>
-        </div>
-      </div>
-    </div>
-
-    <!-- 능력치 설정 -->
-    <div class="card">
-      <div class="card-title">능력치 설정</div>
-      <div class="two-col">
-        <div class="form-group">
-          <label class="form-label">성격</label>
-          <select id="t1-nature"></select>
-        </div>
-        <div class="form-group">
-          <label class="form-label">노력치 (0–32)</label>
-          <div class="slider-group">
-            <input type="range" id="t1-ev-range" min="0" max="32" value="0">
-            <div class="slider-val" id="t1-ev-val">0</div>
-            <input type="number" id="t1-ev-num" min="0" max="32" value="0" style="width:56px;">
-          </div>
-        </div>
-      </div>
-      <div class="form-group" style="margin-top:4px;">
-        <label class="form-label">공격/특공 실능</label>
-        <div style="font-size:18px; font-weight:700; color:var(--accent2);" id="t1-atk-stat">—</div>
-      </div>
-    </div>
-
-    <!-- 보정 설정 -->
-    <div class="card">
-      <div class="card-title">보정</div>
-      <div class="three-col">
-        <div class="form-group">
-          <label class="form-label">랭크업</label>
-          <div class="rank-stepper">
-            <button id="t1-rank-down">−</button>
-            <div class="rank-val neutral" id="t1-rank-val">0</div>
-            <button id="t1-rank-up">+</button>
-          </div>
-        </div>
-        <div class="form-group">
-          <label class="form-label">날씨</label>
-          <select id="t1-weather">
-            <option value="none">없음</option>
-            <option value="sun">쾌청/강한햇살</option>
-            <option value="rain">비/폭우</option>
-            <option value="sand">모래폭풍</option>
-            <option value="snow">눈/우박</option>
-          </select>
-        </div>
-        <div class="form-group">
-          <label class="form-label">타입상성</label>
-          <select id="t1-effectiveness">
-            <option value="4">×4</option>
-            <option value="2">×2</option>
-            <option value="1" selected>×1 (보통)</option>
-            <option value="0.5">×0.5</option>
-            <option value="0.25">×0.25</option>
-            <option value="0">무효</option>
-          </select>
-        </div>
-      </div>
-      <div class="two-col" style="margin-top:4px;">
-        <div class="form-group">
-          <label class="form-label">도구</label>
-          <select id="t1-item"></select>
-        </div>
-        <div class="form-group">
-          <label class="form-label">특성</label>
-          <select id="t1-ability"></select>
-        </div>
-      </div>
-      <div class="form-group" style="margin-top:4px;">
-        <label class="form-label">기타 배율 (기본 1.0)</label>
-        <input type="number" id="t1-custom-mult" value="1.0" step="0.05" min="0.05">
-      </div>
-    </div>
-
-    <!-- 자속 오버라이드 -->
-    <div class="card" style="padding:12px 16px;">
-      <div class="toggle-row">
-        <span class="toggle-label">자속 보정 (×1.5)</span>
-        <label class="toggle">
-          <input type="checkbox" id="t1-stab-toggle">
-          <span class="toggle-slider"></span>
-        </label>
-      </div>
-    </div>
-
-    <!-- 상대 방어력 고려 -->
-    <div class="card">
-      <div class="toggle-row" style="margin-bottom:8px;">
-        <span class="toggle-label" style="font-weight:700;">상대 방어력 고려</span>
-        <label class="toggle">
-          <input type="checkbox" id="t1-def-toggle">
-          <span class="toggle-slider"></span>
-        </label>
-      </div>
-      <div id="t1-def-section" style="display:none;">
-        <div class="divider"></div>
-        <div style="display:flex; justify-content:center; margin-bottom:8px;">
-          <img id="t1-def-poke-img" class="poke-img" src="" alt="" style="display:none;">
-        </div>
-        <div class="two-col">
-          <div class="form-group">
-            <label class="form-label">상대 포켓몬</label>
-            <div class="search-select-wrap" id="t1-def-poke-wrap">
-              <input type="text" id="t1-def-poke-search" placeholder="이름 검색..." autocomplete="off">
-              <div class="dropdown-list hidden" id="t1-def-poke-list"></div>
+          <div id="t1-poke-info" style="display:none; margin-top:8px;">
+            <div style="display:flex; gap:12px; align-items:center;">
+              <img id="t1-poke-img" class="poke-img" src="" alt="">
+              <div>
+                <div style="display:flex; gap:6px; align-items:center; flex-wrap:wrap; margin-bottom:4px;">
+                  <span id="t1-poke-types"></span>
+                </div>
+                <div style="font-size:12px; color:var(--text-dim);">
+                  기본 공격/특공: <span id="t1-base-stats" style="color:var(--accent2); font-weight:700;"></span>
+                </div>
+              </div>
             </div>
           </div>
-          <div class="form-group">
-            <label class="form-label">폼</label>
-            <select id="t1-def-poke-form"></select>
-          </div>
         </div>
-        <div class="three-col">
-          <div class="form-group">
-            <label class="form-label">상대 성격</label>
-            <select id="t1-def-nature"></select>
-          </div>
-          <div class="form-group">
-            <label class="form-label">상대 HP 노력치</label>
-            <input type="number" id="t1-def-hp-ev" min="0" max="32" value="0">
-          </div>
-          <div class="form-group">
-            <label class="form-label">상대 방/특방 노력치</label>
-            <input type="number" id="t1-def-def-ev" min="0" max="32" value="0">
-          </div>
-        </div>
-        <div style="font-size:12px; color:var(--text-dim); margin-top:4px;">
-          상대 HP: <b id="t1-def-hp-stat">—</b> &nbsp;|&nbsp;
-          상대 방어/특방: <b id="t1-def-def-stat">—</b> &nbsp;|&nbsp;
-          상대 내구력: <b id="t1-def-bulk">—</b>
-        </div>
-      </div>
-    </div>
 
-    <!-- 결과 -->
-    <div class="result-panel" id="t1-result-panel">
-      <div class="result-title">결정력 결과</div>
-      <div class="result-row">
-        <span class="result-key">기본 결정력 (실능 × 위력)</span>
-        <span class="result-val" id="t1-res-base">—</span>
-      </div>
-      <div class="result-row">
-        <span class="result-key">자속 포함</span>
-        <span class="result-val" id="t1-res-stab">—</span>
-      </div>
-      <div class="result-row">
-        <span class="result-key">모든 보정 포함</span>
-        <span class="result-val highlight" id="t1-res-total">—</span>
-      </div>
-      <div id="t1-res-def-rows" style="display:none;">
-        <div class="divider"></div>
-        <div class="result-row">
-          <span class="result-key">상대 내구력 대비 데미지</span>
-          <span class="result-val" id="t1-res-dmg-pct">—</span>
+        <!-- 기술 선택 -->
+        <div class="card">
+          <div class="card-title">기술</div>
+          <div class="two-col">
+            <div class="form-group">
+              <label class="form-label">기술 이름</label>
+              <div class="search-select-wrap" id="t1-move-wrap">
+                <input type="text" id="t1-move-search" placeholder="기술 검색..." autocomplete="off">
+                <div class="dropdown-list hidden" id="t1-move-list"></div>
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="form-label">위력 (직접 입력 가능)</label>
+              <input type="number" id="t1-move-power" placeholder="위력" min="1" max="300" value="">
+            </div>
+          </div>
+          <div id="t1-move-info" style="display:none; margin-top:6px;">
+            <div style="display:flex; gap:6px; align-items:center; flex-wrap:wrap;">
+              <span id="t1-move-type-badge"></span>
+              <span id="t1-move-cat-badge"></span>
+              <span id="t1-stab-badge" class="stab-active" style="display:none;">자속 ×1.5</span>
+            </div>
+          </div>
         </div>
-        <div class="result-row">
-          <span class="result-key">예상 타수</span>
-          <span class="result-val" id="t1-res-ohko">—</span>
+
+        <!-- 능력치 설정 -->
+        <div class="card">
+          <div class="card-title">능력치</div>
+          <div class="two-col">
+            <div class="form-group">
+              <label class="form-label">성격</label>
+              <select id="t1-nature"></select>
+            </div>
+            <div class="form-group">
+              <label class="form-label">노력치 (0–32)</label>
+              <div class="slider-group">
+                <input type="range" id="t1-ev-range" min="0" max="32" value="0">
+                <div class="slider-val" id="t1-ev-val">0</div>
+                <input type="number" id="t1-ev-num" min="0" max="32" value="0" style="width:56px;">
+              </div>
+            </div>
+          </div>
+          <div class="form-group" style="margin-top:4px;">
+            <label class="form-label">공격/특공 실능</label>
+            <div style="font-size:18px; font-weight:700; color:var(--accent2);" id="t1-atk-stat">—</div>
+          </div>
         </div>
-      </div>
-    </div>
+
+        <!-- 보정 -->
+        <div class="card">
+          <div class="card-title">보정</div>
+          <div class="three-col">
+            <div class="form-group">
+              <label class="form-label">랭크업</label>
+              <div class="rank-stepper">
+                <button id="t1-rank-down">−</button>
+                <div class="rank-val neutral" id="t1-rank-val">0</div>
+                <button id="t1-rank-up">+</button>
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="form-label">날씨</label>
+              <select id="t1-weather">
+                <option value="none">없음</option>
+                <option value="sun">쾌청/강한햇살</option>
+                <option value="rain">비/폭우</option>
+                <option value="sand">모래폭풍</option>
+                <option value="snow">눈/우박</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label">타입상성</label>
+              <select id="t1-effectiveness">
+                <option value="4">×4</option>
+                <option value="2">×2</option>
+                <option value="1" selected>×1 (보통)</option>
+                <option value="0.5">×0.5</option>
+                <option value="0.25">×0.25</option>
+                <option value="0">무효</option>
+              </select>
+            </div>
+          </div>
+          <div class="two-col" style="margin-top:8px;">
+            <div class="form-group">
+              <label class="form-label">도구</label>
+              <select id="t1-item"></select>
+            </div>
+            <div class="form-group">
+              <label class="form-label">특성</label>
+              <select id="t1-ability"></select>
+            </div>
+          </div>
+          <div class="two-col" style="margin-top:8px;">
+            <div class="form-group">
+              <label class="form-label">기타 배율 (기본 1.0)</label>
+              <input type="number" id="t1-custom-mult" value="1.0" step="0.05" min="0.05">
+            </div>
+            <div class="form-group">
+              <label class="form-label">자속 보정 (×1.5)</label>
+              <div style="margin-top:4px;">
+                <label class="toggle">
+                  <input type="checkbox" id="t1-stab-toggle">
+                  <span class="toggle-slider"></span>
+                </label>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 결정력 결과 -->
+        <div class="result-panel" id="t1-result-panel">
+          <div class="result-title">결정력</div>
+          <div class="result-row">
+            <span class="result-key">기본 (실능 × 위력)</span>
+            <span class="result-val" id="t1-res-base">—</span>
+          </div>
+          <div class="result-row">
+            <span class="result-key">자속 포함</span>
+            <span class="result-val" id="t1-res-stab">—</span>
+          </div>
+          <div class="result-row">
+            <span class="result-key">모든 보정 포함</span>
+            <span class="result-val highlight" id="t1-res-total">—</span>
+          </div>
+        </div>
+
+      </div><!-- /side-col 왼쪽 -->
+
+      <!-- ========== 오른쪽: 방어 측 ========== -->
+      <div class="side-col">
+        <div class="side-col-title">🛡️ 방어 포켓몬</div>
+
+        <!-- 상대 포켓몬 선택 -->
+        <div class="card">
+          <div class="card-title">포켓몬</div>
+          <div class="two-col">
+            <div class="form-group">
+              <label class="form-label">이름 검색</label>
+              <div class="search-select-wrap" id="t1-def-poke-wrap">
+                <input type="text" id="t1-def-poke-search" placeholder="이름 검색..." autocomplete="off">
+                <div class="dropdown-list hidden" id="t1-def-poke-list"></div>
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="form-label">폼</label>
+              <select id="t1-def-poke-form"></select>
+            </div>
+          </div>
+          <div style="display:flex; justify-content:center; margin-top:8px;">
+            <img id="t1-def-poke-img" class="poke-img" src="" alt="" style="display:none;">
+          </div>
+        </div>
+
+        <!-- 상대 능력치 -->
+        <div class="card">
+          <div class="card-title">능력치</div>
+          <div class="three-col">
+            <div class="form-group">
+              <label class="form-label">성격</label>
+              <select id="t1-def-nature"></select>
+            </div>
+            <div class="form-group">
+              <label class="form-label">HP 노력치</label>
+              <input type="number" id="t1-def-hp-ev" min="0" max="32" value="0">
+            </div>
+            <div class="form-group">
+              <label class="form-label">방/특방 노력치</label>
+              <input type="number" id="t1-def-def-ev" min="0" max="32" value="0">
+            </div>
+          </div>
+          <div style="font-size:12px; color:var(--text-dim); margin-top:8px;">
+            HP: <b id="t1-def-hp-stat">—</b> &nbsp;|&nbsp;
+            방어/특방: <b id="t1-def-def-stat">—</b> &nbsp;|&nbsp;
+            내구력: <b id="t1-def-bulk">—</b>
+          </div>
+        </div>
+
+        <!-- 타수 결과 -->
+        <div class="result-panel" id="t1-res-def-rows">
+          <div class="result-title">타수 계산</div>
+          <div class="result-row">
+            <span class="result-key">1타당 데미지</span>
+            <span class="result-val" id="t1-res-dmg-pct">—</span>
+          </div>
+          <div class="result-row">
+            <span class="result-key">예상 타수</span>
+            <span class="result-val" id="t1-res-ohko">—</span>
+          </div>
+        </div>
+
+      </div><!-- /side-col 오른쪽 -->
+
+    </div><!-- /side-layout -->
 
     <!-- 저장 버튼 -->
     <div style="text-align:right; margin-top:12px;">

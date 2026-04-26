@@ -55,13 +55,6 @@ const T1 = {
     // 자속 토글
     document.getElementById('t1-stab-toggle').addEventListener('change', () => T1.update());
 
-    // 상대 방어력 토글
-    document.getElementById('t1-def-toggle').addEventListener('change', e => {
-      document.getElementById('t1-def-section').style.display = e.target.checked ? 'block' : 'none';
-      document.getElementById('t1-res-def-rows').style.display = e.target.checked ? 'block' : 'none';
-      T1.update();
-    });
-
     // 상대 성격/노력치 변경
     ['t1-def-nature','t1-def-hp-ev','t1-def-def-ev'].forEach(id => {
       document.getElementById(id).addEventListener('change', () => T1.update());
@@ -209,11 +202,8 @@ const T1 = {
     document.getElementById('t1-res-stab').textContent  = fmt(result.withStab);
     document.getElementById('t1-res-total').textContent = fmt(result.total);
 
-    // 상대 방어력 고려
-    const defOn = document.getElementById('t1-def-toggle').checked;
-    if (defOn) {
-      T1.updateDefResult(result.total, move);
-    }
+    // 상대 방어력 계산 (항상 실행)
+    T1.updateDefResult(result.total, move);
   },
 
   updateDefResult(kesulTotal, move) {
