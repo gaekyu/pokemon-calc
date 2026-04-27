@@ -54,10 +54,10 @@ function calcKesul(params) {
 }
 
 // ===== 내구력 계산 =====
-// Lv50 데미지 계수: floor(2*50/5+2)/50 = 22/50 = 0.44
+// 0.411: floor 연산 2회 + +2 보정을 반영한 실측 계수
 function calcBulk(hp, def) {
   if (!hp || !def) return null;
-  return Math.round(hp * def / 0.44);
+  return Math.round(hp * def / 0.411);
 }
 
 // ===== 데미지 비율 계산 =====
@@ -68,7 +68,7 @@ function calcDmgRatio(kesul, bulk) {
 }
 
 // ===== 역추적: 받은 데미지 → 상대 공격 실능 =====
-// atk = damage × def / (power × multipliers × 0.44)
+// atk = damage × def / (power × multipliers × 0.411)
 function reverseCalcAtk(params) {
   const {
     damage,       // 받은 HP 피해
@@ -96,7 +96,7 @@ function reverseCalcAtk(params) {
 
   const totalMult = stabMult * rankMult * weatherMult * itemMult * (abilityMult || 1) * effMult * custom;
 
-  const atk = (damage * defStat) / (movePower * totalMult * 0.44);
+  const atk = (damage * defStat) / (movePower * totalMult * 0.411);
   return Math.round(atk);
 }
 
