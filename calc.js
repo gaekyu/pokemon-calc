@@ -57,7 +57,7 @@ function calcKesul(params) {
 // 0.411: floor 연산 2회 + +2 보정을 반영한 실측 계수
 function calcBulk(hp, def) {
   if (!hp || !def) return null;
-  return Math.round(hp * def / 0.411);
+  return Math.floor(hp * def / 0.411);
 }
 
 // ===== 데미지 비율 계산 =====
