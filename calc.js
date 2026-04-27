@@ -3,10 +3,11 @@
 
 function calcStat(base, ev, isHp, natureMult) {
   ev = Math.max(0, Math.min(32, ev || 0));
+  const evContrib = ev * 2; // 포챔스: EV × 2 적용
   if (isHp) {
-    return Math.floor((2 * base + 31 + ev) * 50 / 100) + 60;
+    return Math.floor((2 * base + 31 + evContrib) * 50 / 100) + 60;
   } else {
-    const raw = Math.floor((2 * base + 31 + ev) * 50 / 100 + 5);
+    const raw = Math.floor((2 * base + 31 + evContrib) * 50 / 100 + 5);
     return Math.floor(raw * (natureMult || 1));
   }
 }
@@ -53,9 +54,10 @@ function calcKesul(params) {
 }
 
 // ===== 내구력 계산 =====
+// Lv50 데미지 계수: floor(2*50/5+2)/50 = 22/50 = 0.44
 function calcBulk(hp, def) {
   if (!hp || !def) return null;
-  return Math.round(hp * def / 0.411);
+  return Math.round(hp * def / 0.44);
 }
 
 // ===== 데미지 비율 계산 =====
@@ -66,7 +68,7 @@ function calcDmgRatio(kesul, bulk) {
 }
 
 // ===== 역추적: 받은 데미지 → 상대 공격 실능 =====
-// atk = damage × def / (power × multipliers × 0.411)
+// atk = damage × def / (power × multipliers × 0.44)
 function reverseCalcAtk(params) {
   const {
     damage,       // 받은 HP 피해
@@ -94,7 +96,7 @@ function reverseCalcAtk(params) {
 
   const totalMult = stabMult * rankMult * weatherMult * itemMult * (abilityMult || 1) * effMult * custom;
 
-  const atk = (damage * defStat) / (movePower * totalMult * 0.411);
+  const atk = (damage * defStat) / (movePower * totalMult * 0.44);
   return Math.round(atk);
 }
 

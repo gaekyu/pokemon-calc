@@ -254,7 +254,8 @@ const T3 = {
         const sk = md.cat === '물리' ? 'atk' : 'spa';
         const mult = getNatureMult(nat, sk);
         const stat = calcStat(poke[sk], evs[sk] || 0, false, mult);
-        kesulStr = ` <span style="color:var(--accent2);">결${fmt(stat * power)}</span>`;
+        const stabMult = isSTAB(poke.types, md.type) ? 1.5 : 1;
+        kesulStr = ` <span style="color:var(--accent2);">결${fmt(Math.round(stat * power * stabMult))}</span>`;
       }
       return `<span class="move-chip">${m.name}${power?` [${power}]`:''}${kesulStr}</span>`;
     }).join('');
