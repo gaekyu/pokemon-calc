@@ -181,6 +181,7 @@ body {
 .ev-input-label { width: 40px; font-size: 11px; color: var(--text-muted); text-align: right; flex-shrink: 0; }
 .ev-input-row input[type="range"] { flex: 1; }
 .ev-input-row input[type="number"] { width: 46px; }
+.ev-stat-display { min-width: 36px; font-size: 11px; font-weight: 700; color: var(--accent2); text-align: right; flex-shrink: 0; }
 
 /* ===== 저장 카드 그리드 ===== */
 #t3-save-list { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
@@ -562,6 +563,18 @@ textarea { resize: vertical; min-height: 60px; }
   color: var(--text-muted);
   font-size: 13px;
 }
+
+/* ===== 아코디언 카드 ===== */
+.save-card-collapsed { cursor: pointer; }
+.save-card-collapsed:hover { border-color: var(--accent); }
+.save-card-expand-btn {
+  width: 100%; background: none; border: none; border-top: 1px solid var(--border);
+  color: var(--text-muted); cursor: pointer; font-size: 10px; padding: 4px 0; margin-top: 4px;
+  transition: color 0.1s;
+}
+.save-card-expand-btn:hover { color: var(--accent2); }
+.save-card-detail { display: none; }
+.save-card-detail.open { display: block; }
 
 /* ===== 역추적 결과 테이블 ===== */
 .result-table {
@@ -950,6 +963,15 @@ textarea { resize: vertical; min-height: 60px; }
       <button class="btn btn-primary btn-sm" id="t3-add-btn">+ 새로 추가</button>
     </div>
 
+    <!-- 엔트리 섹션 -->
+    <div id="t3-entry-section" style="display:none; margin-bottom:16px;">
+      <div class="section-header" style="margin-bottom:8px;">
+        <span class="section-title">⚔️ 현재 엔트리 (최대 6마리)</span>
+      </div>
+      <div id="t3-entry-list" style="display:grid; grid-template-columns:repeat(auto-fill,minmax(140px,1fr)); gap:10px;"></div>
+      <div style="height:1px; background:var(--border); margin:14px 0;"></div>
+    </div>
+
     <div id="t3-save-list"></div>
 
   </div>
@@ -1327,12 +1349,12 @@ textarea { resize: vertical; min-height: 60px; }
         <span id="modal-ev-total" style="font-size:12px; color:var(--text-dim);">합계: 0 / 66</span>
       </div>
       <div style="margin-top:6px;">
-        <div class="ev-input-row"><span class="ev-input-label">HP</span><input type="range" id="modal-ev-hp" min="0" max="32" value="0"><input type="number" id="modal-ev-hp-num" min="0" max="32" value="0"></div>
-        <div class="ev-input-row"><span class="ev-input-label">공격</span><input type="range" id="modal-ev-atk" min="0" max="32" value="0"><input type="number" id="modal-ev-atk-num" min="0" max="32" value="0"></div>
-        <div class="ev-input-row"><span class="ev-input-label">방어</span><input type="range" id="modal-ev-def" min="0" max="32" value="0"><input type="number" id="modal-ev-def-num" min="0" max="32" value="0"></div>
-        <div class="ev-input-row"><span class="ev-input-label">특공</span><input type="range" id="modal-ev-spa" min="0" max="32" value="0"><input type="number" id="modal-ev-spa-num" min="0" max="32" value="0"></div>
-        <div class="ev-input-row"><span class="ev-input-label">특방</span><input type="range" id="modal-ev-spd" min="0" max="32" value="0"><input type="number" id="modal-ev-spd-num" min="0" max="32" value="0"></div>
-        <div class="ev-input-row"><span class="ev-input-label">스피드</span><input type="range" id="modal-ev-spe" min="0" max="32" value="0"><input type="number" id="modal-ev-spe-num" min="0" max="32" value="0"></div>
+        <div class="ev-input-row"><span class="ev-input-label">HP</span><input type="range" id="modal-ev-hp" min="0" max="32" value="0"><input type="number" id="modal-ev-hp-num" min="0" max="32" value="0"><span class="ev-stat-display" id="modal-ev-hp-stat">—</span></div>
+        <div class="ev-input-row"><span class="ev-input-label">공격</span><input type="range" id="modal-ev-atk" min="0" max="32" value="0"><input type="number" id="modal-ev-atk-num" min="0" max="32" value="0"><span class="ev-stat-display" id="modal-ev-atk-stat">—</span></div>
+        <div class="ev-input-row"><span class="ev-input-label">방어</span><input type="range" id="modal-ev-def" min="0" max="32" value="0"><input type="number" id="modal-ev-def-num" min="0" max="32" value="0"><span class="ev-stat-display" id="modal-ev-def-stat">—</span></div>
+        <div class="ev-input-row"><span class="ev-input-label">특공</span><input type="range" id="modal-ev-spa" min="0" max="32" value="0"><input type="number" id="modal-ev-spa-num" min="0" max="32" value="0"><span class="ev-stat-display" id="modal-ev-spa-stat">—</span></div>
+        <div class="ev-input-row"><span class="ev-input-label">특방</span><input type="range" id="modal-ev-spd" min="0" max="32" value="0"><input type="number" id="modal-ev-spd-num" min="0" max="32" value="0"><span class="ev-stat-display" id="modal-ev-spd-stat">—</span></div>
+        <div class="ev-input-row"><span class="ev-input-label">스피드</span><input type="range" id="modal-ev-spe" min="0" max="32" value="0"><input type="number" id="modal-ev-spe-num" min="0" max="32" value="0"><span class="ev-stat-display" id="modal-ev-spe-stat">—</span></div>
       </div>
     </div>
 

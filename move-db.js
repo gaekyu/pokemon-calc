@@ -617,6 +617,70 @@ const ITEMS = {
   "실크스카프":       { atkMult:1.2, defMult:1, speMult:1,   moveType:"노말" },
   "요정의 깃털":      { atkMult:1.2, defMult:1, speMult:1,   moveType:"페어리" },
   "용의 이빨":        { atkMult:1.2, defMult:1, speMult:1,   moveType:"드래곤" },
+  // ── 열매 (타입 저항·회복 계열, 배율은 타입상성 선택으로 처리)
+  "버치열매":  { atkMult:1, defMult:1, speMult:1, moveType:null },
+  "유루열매":  { atkMult:1, defMult:1, speMult:1, moveType:null },
+  "복슝열매":  { atkMult:1, defMult:1, speMult:1, moveType:null },
+  "복분열매":  { atkMult:1, defMult:1, speMult:1, moveType:null },
+  "배리열매":  { atkMult:1, defMult:1, speMult:1, moveType:null },
+  "시몬열매":  { atkMult:1, defMult:1, speMult:1, moveType:null },
+  "과사열매":  { atkMult:1, defMult:1, speMult:1, moveType:null },
+  "카리열매":  { atkMult:1, defMult:1, speMult:1, moveType:null },
+  "린드열매":  { atkMult:1, defMult:1, speMult:1, moveType:null },
+  "오카열매":  { atkMult:1, defMult:1, speMult:1, moveType:null },
+  "꼬시개열매": { atkMult:1, defMult:1, speMult:1, moveType:null },
+  "초나열매":  { atkMult:1, defMult:1, speMult:1, moveType:null },
+  "리체열매":  { atkMult:1, defMult:1, speMult:1, moveType:null },
+  "바코열매":  { atkMult:1, defMult:1, speMult:1, moveType:null },
+  "루미열매":  { atkMult:1, defMult:1, speMult:1, moveType:null },
+  "으름열매":  { atkMult:1, defMult:1, speMult:1, moveType:null },
+  "슈캐열매":  { atkMult:1, defMult:1, speMult:1, moveType:null },
+  "플카열매":  { atkMult:1, defMult:1, speMult:1, moveType:null },
+  "로플열매":  { atkMult:1, defMult:1, speMult:1, moveType:null },
+  "야파열매":  { atkMult:1, defMult:1, speMult:1, moveType:null },
+  "수불열매":  { atkMult:1, defMult:1, speMult:1, moveType:null },
+  "하반열매":  { atkMult:1, defMult:1, speMult:1, moveType:null },
+  "마코열매":  { atkMult:1, defMult:1, speMult:1, moveType:null },
+  "바리비열매": { atkMult:1, defMult:1, speMult:1, moveType:null },
+  "로셀열매":  { atkMult:1, defMult:1, speMult:1, moveType:null },
+  "자뭉열매":  { atkMult:1, defMult:1, speMult:1, moveType:null },
+  // ── 메가 나이트
+  "이상해꽃나이트":  { atkMult:1, defMult:1, speMult:1, moveType:null },
+  "리자몽나이트X":   { atkMult:1, defMult:1, speMult:1, moveType:null },
+  "리자몽나이트Y":   { atkMult:1, defMult:1, speMult:1, moveType:null },
+  "거북왕나이트":    { atkMult:1, defMult:1, speMult:1, moveType:null },
+  "독침붕나이트":    { atkMult:1, defMult:1, speMult:1, moveType:null },
+  "피죤투나이트":    { atkMult:1, defMult:1, speMult:1, moveType:null },
+  "후딘나이트":      { atkMult:1, defMult:1, speMult:1, moveType:null },
+  "야도란나이트":    { atkMult:1, defMult:1, speMult:1, moveType:null },
+  "팬텀나이트":      { atkMult:1, defMult:1, speMult:1, moveType:null },
+  "캥카나이트":      { atkMult:1, defMult:1, speMult:1, moveType:null },
+  "쁘사이저나이트":  { atkMult:1, defMult:1, speMult:1, moveType:null },
+  "갸라도스나이트":  { atkMult:1, defMult:1, speMult:1, moveType:null },
+  "프테라나이트":    { atkMult:1, defMult:1, speMult:1, moveType:null },
+  "전룡나이트":      { atkMult:1, defMult:1, speMult:1, moveType:null },
+  "강철톤나이트":    { atkMult:1, defMult:1, speMult:1, moveType:null },
+  "핫삼나이트":      { atkMult:1, defMult:1, speMult:1, moveType:null },
+  "헤라크로스나이트": { atkMult:1, defMult:1, speMult:1, moveType:null },
+  "헬가나이트":      { atkMult:1, defMult:1, speMult:1, moveType:null },
+  "마기라스나이트":  { atkMult:1, defMult:1, speMult:1, moveType:null },
+  "가디안나이트":    { atkMult:1, defMult:1, speMult:1, moveType:null },
+  "깜까미나이트":    { atkMult:1, defMult:1, speMult:1, moveType:null },
+  "보스로라나이트":  { atkMult:1, defMult:1, speMult:1, moveType:null },
+  "메디나이트":      { atkMult:1, defMult:1, speMult:1, moveType:null },
+  "썬더볼트나이트":  { atkMult:1, defMult:1, speMult:1, moveType:null },
+  "샤크니아나이트":  { atkMult:1, defMult:1, speMult:1, moveType:null },
+  "폭타나이트":      { atkMult:1, defMult:1, speMult:1, moveType:null },
+  "파비코리나이트":  { atkMult:1, defMult:1, speMult:1, moveType:null },
+  "다크펫나이트":    { atkMult:1, defMult:1, speMult:1, moveType:null },
+  "앱솔나이트":      { atkMult:1, defMult:1, speMult:1, moveType:null },
+  "얼음귀신나이트":  { atkMult:1, defMult:1, speMult:1, moveType:null },
+  "한카리아스나이트": { atkMult:1, defMult:1, speMult:1, moveType:null },
+  "루카리오나이트":  { atkMult:1, defMult:1, speMult:1, moveType:null },
+  "눈설왕나이트":    { atkMult:1, defMult:1, speMult:1, moveType:null },
+  "럭시오나이트":    { atkMult:1, defMult:1, speMult:1, moveType:null },
+  "엘레이드나이트":  { atkMult:1, defMult:1, speMult:1, moveType:null },
+  "다부니나이트":    { atkMult:1, defMult:1, speMult:1, moveType:null },
 };
 const ITEM_NAMES = Object.keys(ITEMS);
 
@@ -678,6 +742,62 @@ const ABILITIES = {
   "심록":           { mult:1.5,  condition:"grass_low_hp" },
   "벌레의 알림":    { mult:1.5,  condition:"bug_low_hp" },
   "하드록":         { mult:0.75, condition:"filter" },
+  // 공격 관련 추가
+  "각오":           { mult:1.5,  condition:"physical_low_hp" }, // 물리기술, HP≤1/3 시 ×1.5
+  "지식탐구":       { mult:1.5,  condition:"special_always" }, // 특수기술 항상 ×1.5
+  "격투마음":       { mult:1.5,  condition:"type_fighting" },
+  "독힐":           { mult:1,    condition:"none" },
+  "사마귀의이빔":   { mult:1.5,  condition:"slash" },          // 예리함과 동일 효과
+  "색안경":         { mult:2.0,  condition:"not_very_effective" },
+  "천적관계":       { mult:2.0,  condition:"super_effective" },
+  "파사드":         { mult:2.0,  condition:"physical_status" }, // 상태이상 시 물리기술 ×2
+  "스카이스킨":     { mult:1.3,  condition:"normal_to_fly" },  // 노말→비행, ×1.3
+  "냉동스킨":       { mult:1.3,  condition:"normal_to_ice" },  // 노말→얼음, ×1.3
+  "불꽃스킨":       { mult:1.3,  condition:"normal_to_fire" }, // 노말→불꽃, ×1.3
+  "요정스킨":       { mult:1.3,  condition:"normal_to_fairy" },// 노말→페어리, ×1.3
+  "일렉트릭스킨":   { mult:1.3,  condition:"normal_to_electric" },
+  "방음":           { mult:1,    condition:"none" },
+  "수면스타트":     { mult:1,    condition:"none" },
+  "자연치유":       { mult:1,    condition:"none" },
+  "재생력":         { mult:1,    condition:"none" },
+  "미라":           { mult:1,    condition:"none" },
+  "강인함":         { mult:1,    condition:"none" },
+  // 스피드 관련 (계산기에서 참고용)
+  "불굴의마음":     { mult:1,    condition:"none" }, // 상태이상 시 스피드×1.5 (탭5에서 직접 조정)
+  "엽록소":         { mult:1,    condition:"none" }, // 쾌청 시 스피드×2
+  "모래질주":       { mult:1,    condition:"none" }, // 모래폭풍 시 스피드×1.5 (바위)
+  "물가속":         { mult:1,    condition:"none" }, // 비 시 스피드×2 (물)
+  "빠른발":         { mult:1,    condition:"none" }, // 상태이상 시 스피드×1.5
+  "바람타기":       { mult:1,    condition:"none" },
+  "순풍날개":       { mult:1,    condition:"none" },
+  // 방어 관련
+  "두꺼운지방":     { mult:1,    condition:"none" }, // 불/얼음 기술 ×0.5 받음
+  "멀티스케일":     { mult:1,    condition:"none" }, // 만피 시 ×0.5 받음
+  "고체암석":       { mult:0.75, condition:"filter" },
+  "모래지기":       { mult:1,    condition:"none" }, // 모래폭풍 중 바위 특방×1.5
+  "풀숲기":         { mult:1,    condition:"none" }, // 그래스필드 중 풀 특방×1.5
+  "배짱":           { mult:1,    condition:"none" },
+  "받아넘기기":     { mult:1,    condition:"none" },
+  "유연":           { mult:1,    condition:"none" },
+  // 기타
+  "위협":           { mult:1,    condition:"none" },
+  "정전기":         { mult:1,    condition:"none" },
+  "포자":           { mult:1,    condition:"none" },
+  "압도적인힘":     { mult:1,    condition:"none" },
+  "복안":           { mult:1,    condition:"none" },
+  "날카로운눈":     { mult:1,    condition:"none" },
+  "천진":           { mult:1,    condition:"none" },
+  "클리어바디":     { mult:1,    condition:"none" },
+  "방패먼지":       { mult:1,    condition:"none" },
+  "구름바라기":     { mult:1,    condition:"none" },
+  "공중부양":       { mult:1,    condition:"none" },
+  "내열":           { mult:1,    condition:"none" },
+  "건조피부":       { mult:1,    condition:"none" },
+  "물흡수":         { mult:1,    condition:"none" },
+  "전기엔진":       { mult:1,    condition:"none" },
+  "증기기관":       { mult:1.5,  condition:"water_or_fire_hit" },
+  "기대이상":       { mult:1,    condition:"none" },
+  "변환자재":       { mult:1,    condition:"none" },
 };
 const ABILITY_NAMES = Object.keys(ABILITIES);
 
@@ -701,6 +821,14 @@ function getAbilityMult(abilityName, move, isSTAB) {
   if (c === "water_low_hp" && m.type === "물")   return { mult:ab.mult, stabOverride:false };
   if (c === "grass_low_hp" && m.type === "풀")   return { mult:ab.mult, stabOverride:false };
   if (c === "bug_low_hp"   && m.type === "벌레") return { mult:ab.mult, stabOverride:false };
+  if (c === "special_always" && m.cat === "특수") return { mult:ab.mult, stabOverride:false };
+  if (c === "type_fighting"  && m.type === "격투") return { mult:ab.mult, stabOverride:false };
+  if (c === "physical_low_hp" && m.cat === "물리") return { mult:ab.mult, stabOverride:false };
+  if (c === "physical_status" && m.cat === "물리") return { mult:ab.mult, stabOverride:false };
+  if ((c === "normal_to_fly" || c === "normal_to_ice" || c === "normal_to_fire" ||
+       c === "normal_to_fairy" || c === "normal_to_electric") && m.type === "노말")
+    return { mult:ab.mult, stabOverride:false };
+  if (c === "water_or_fire_hit") return { mult:ab.mult, stabOverride:false };
   return { mult:1, stabOverride:false };
 }
 
