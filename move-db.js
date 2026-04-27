@@ -798,6 +798,309 @@ const ABILITIES = {
   "증기기관":       { mult:1.5,  condition:"water_or_fire_hit" },
   "기대이상":       { mult:1,    condition:"none" },
   "변환자재":       { mult:1,    condition:"none" },
+  // ── 타입별 공격 배율
+  "타오르는불꽃":   { mult:1.5,  condition:"type_fire" },      // 불꽃기술 ×1.5 (불꽃으로 맞으면 발동)
+  "수포":           { mult:2.0,  condition:"type_water" },     // 물기술 ×2
+  "트랜지스터":     { mult:1.3,  condition:"type_electric" },  // 전기기술 ×1.3
+  "용의턱":         { mult:1.5,  condition:"type_dragon" },    // 드래곤기술 ×1.5
+  "다크오라":       { mult:1.33, condition:"type_dark" },      // 악기술 ×4/3
+  "페어리오라":     { mult:1.33, condition:"type_fairy" },     // 페어리기술 ×4/3
+  "강철정신":       { mult:1.5,  condition:"type_steel" },     // 강철기술 ×1.5
+  "펑크록":         { mult:1.3,  condition:"sound" },          // 소리기술 ×1.3
+  // ── 항상 적용 공격 배율
+  "천하장사":       { mult:2.0,  condition:"always_atk" },     // 물리기술 ×2 (순수한힘과 동일)
+  "부자유친":       { mult:1.25, condition:"always_atk" },     // 2회 공격 (총 ×1.25 환산)
+  "우격다짐":       { mult:1.3,  condition:"always_atk" },     // 추가효과 없어지지만 ×1.3
+  "브레인포스":     { mult:1.25, condition:"always_atk" },     // 효과가 굉장한 기술 ×1.25
+  // ── 조건부 공격 배율
+  "근성":           { mult:1.5,  condition:"physical_status" },// 상태이상 시 물리기술 ×1.5
+  "선파워":         { mult:1.5,  condition:"special_always" }, // 맑음 시 특공 ×1.5
+  "열폭주":         { mult:1.5,  condition:"special_always" }, // 화상 시 특수기술 ×1.5
+  "옹골찬턱":       { mult:1.5,  condition:"bite" },           // 무는 기술 ×1.5
+  // ── 방어 (SE 경감)
+  "프리즘아머":     { mult:0.75, condition:"filter" },         // SE 받을 때 ×0.75
+  // ── 날씨 소환
+  "가뭄":           { mult:1,    condition:"none" },
+  "잔비":           { mult:1,    condition:"none" },
+  "모래날림":       { mult:1,    condition:"none" },
+  "눈퍼뜨리기":     { mult:1,    condition:"none" },
+  "진홍빛고동":     { mult:1,    condition:"none" },
+  "시작의바다":     { mult:1,    condition:"none" },
+  "델타스트림":     { mult:1,    condition:"none" },
+  // ── 스피드 관련
+  "쓱쓱":           { mult:1,    condition:"none" }, // 비 시 스피드×2
+  "서핑테일":       { mult:1,    condition:"none" }, // 일렉트릭필드 시 스피드×2
+  "속보":           { mult:1,    condition:"none" }, // 상태이상 시 스피드×1.5
+  "고대활성":       { mult:1,    condition:"none" }, // 맑음/부스트에너지 시 최고능력↑
+  "쿼크차지":       { mult:1,    condition:"none" }, // 일렉트릭필드/부스트에너지 시 최고능력↑
+  "하드론엔진":     { mult:1,    condition:"none" }, // 등장 시 일렉트릭필드
+  // ── 면역/흡수
+  "부유":           { mult:1,    condition:"none" }, // 땅타입 무효
+  "피뢰침":         { mult:1,    condition:"none" }, // 전기타입 무효 + 특공↑
+  "저수":           { mult:1,    condition:"none" }, // 물타입 무효 + HP회복
+  "축전":           { mult:1,    condition:"none" }, // 전기타입 무효 + HP회복
+  "초식":           { mult:1,    condition:"none" }, // 풀타입 무효 + 공격↑
+  "흙먹기":         { mult:1,    condition:"none" }, // 땅타입 무효 + HP회복
+  // ── 생존/방어 패시브
+  "옹골참":         { mult:1,    condition:"none" }, // 만피 시 일격사 불가
+  "매직가드":       { mult:1,    condition:"none" }, // 간접 데미지 무효
+  "지구력":         { mult:1,    condition:"none" }, // 공격받으면 방어↑
+  "복슬복슬":       { mult:1,    condition:"none" }, // 물리기술 데미지 1/2
+  "멀티스케일":     { mult:1,    condition:"none" }, // 만피 시 데미지 1/2 (이미 있음 — 중복 스킵)
+  "스펙터가드":     { mult:1,    condition:"none" }, // HP 풀일 때 피해 감소
+  "퍼코트":         { mult:1,    condition:"none" }, // 물리 데미지 1/2
+  "불가사의부적":   { mult:1,    condition:"none" }, // 효과 굉장한 기술만 맞음
+  "테라셸":         { mult:1,    condition:"none" }, // HP 풀일 때 모든 타입 반감
+  // ── 특성 무시 공격
+  "틀깨기":         { mult:1,    condition:"none" }, // 상대 특성 무시
+  "터보블레이즈":   { mult:1,    condition:"none" }, // 상대 특성 무시
+  "테라볼티지":     { mult:1,    condition:"none" }, // 상대 특성 무시
+  "틈새포착":       { mult:1,    condition:"none" }, // 벽/대타출동 무시
+  // ── 우선도 관련
+  "짓궂은마음":     { mult:1,    condition:"none" }, // 변화기술 선제
+  "질풍날개":       { mult:1,    condition:"none" }, // 만피 시 비행기술 선제
+  "여왕의위엄":     { mult:1,    condition:"none" }, // 상대 선제기술 차단
+  "비비드바디":     { mult:1,    condition:"none" }, // 상대 선제기술 차단
+  "테일아머":       { mult:1,    condition:"none" }, // 상대 선제기술 차단
+  "힐링시프트":     { mult:1,    condition:"none" }, // 회복기술 선제
+  // ── 연속기
+  "스킬링크":       { mult:1,    condition:"none" }, // 연속기 항상 최대 횟수
+  // ── 급소 관련
+  "발끈":           { mult:1,    condition:"none" }, // 급소 맞으면 공격 최대
+  "스나이퍼":       { mult:1,    condition:"none" }, // 급소 ×1.5 추가
+  // ── 능력 변화 관련
+  "오기":           { mult:1,    condition:"none" }, // 능력 감소 시 공격 크게↑
+  "승기":           { mult:1,    condition:"none" }, // 능력 감소 시 특공 2랭크↑
+  "정의의마음":     { mult:1,    condition:"none" }, // 악타입 공격 받으면 공격↑
+  "괴짜":           { mult:1,    condition:"none" }, // 능력 변화 방향 역전
+  "분노의경혈":     { mult:1,    condition:"none" }, // 급소 맞으면 공격↑
+  "분노의껍질":     { mult:1,    condition:"none" }, // HP 절반 시 공방↓ 특공특방스핏↑
+  "단순":           { mult:1,    condition:"none" }, // 능력 변화 2배
+  "심술꾸러기":     { mult:1,    condition:"none" }, // 능력 변화 역전
+  "편승":           { mult:1,    condition:"none" }, // 아군 능력↑ 시 같이↑
+  "협연":           { mult:1,    condition:"none" }, // 같은 편 능력 상승 편승
+  // ── KO 보너스
+  "비스트부스트":   { mult:1,    condition:"none" }, // KO 시 최고 능력↑
+  "백의울음":       { mult:1,    condition:"none" }, // KO 시 공격↑
+  "흑의울음":       { mult:1,    condition:"none" }, // KO 시 특공↑
+  "소울하트":       { mult:1,    condition:"none" }, // KO될 때마다 특공↑
+  "총대장":         { mult:1,    condition:"none" }, // 기절 동료 수에 따라 공특공↑
+  "유대변화":       { mult:1,    condition:"none" }, // KO 시 유대감으로 능력↑
+  // ── 폼 체인지
+  "달마모드":       { mult:1,    condition:"none" },
+  "배틀스위치":     { mult:1,    condition:"none" }, // 킬가르도 폼 전환
+  "스웜체인지":     { mult:1,    condition:"none" },
+  "테라체인지":     { mult:1,    condition:"none" },
+  "마이티체인지":   { mult:1,    condition:"none" },
+  "아이스페이스":   { mult:1,    condition:"none" },
+  // ── 상태이상 관련
+  "정전기":         { mult:1,    condition:"none" }, // (이미 있음)
+  "불꽃몸":         { mult:1,    condition:"none" }, // 접촉 시 화상
+  "독가시":         { mult:1,    condition:"none" }, // 접촉 시 독
+  "포자":           { mult:1,    condition:"none" }, // (이미 있음)
+  "악취":           { mult:1,    condition:"none" }, // 접촉 시 풀죽
+  "헤롱헤롱바디":   { mult:1,    condition:"none" }, // 접촉 시 헤롱헤롱
+  "까칠한피부":     { mult:1,    condition:"none" }, // 접촉 시 데미지
+  "철가시":         { mult:1,    condition:"none" }, // 접촉 시 데미지
+  "해감액":         { mult:1,    condition:"none" },
+  "유폭":           { mult:1,    condition:"none" }, // 기절 시 접촉 데미지
+  "독폭주":         { mult:1,    condition:"none" },
+  "부식":           { mult:1,    condition:"none" }, // 강철/독도 독 상태
+  "독사슬":         { mult:1,    condition:"none" },
+  "독수":           { mult:1,    condition:"none" },
+  "독치장":         { mult:1,    condition:"none" },
+  "포이즌힐":       { mult:1,    condition:"none" }, // 독 상태 시 HP 회복
+  // ── 면역/내성
+  "내열":           { mult:1,    condition:"none" }, // (이미 있음)
+  "방음":           { mult:1,    condition:"none" }, // (이미 있음)
+  "방탄":           { mult:1,    condition:"none" }, // 구슬/폭탄 기술 차단
+  "방진":           { mult:1,    condition:"none" }, // 가루 기술 무효
+  "인분":           { mult:1,    condition:"none" }, // 추가효과 무효
+  "얼음인분":       { mult:1,    condition:"none" }, // 특수 데미지 1/2
+  "불면":           { mult:1,    condition:"none" },
+  "수면스타트":     { mult:1,    condition:"none" }, // (이미 있음)
+  "의기양양":       { mult:1,    condition:"none" },
+  "유연":           { mult:1,    condition:"none" }, // (이미 있음)
+  "수의베일":       { mult:1,    condition:"none" }, // 화상 무효
+  "정화의소금":     { mult:1,    condition:"none" }, // 상태이상 무효
+  "마이페이스":     { mult:1,    condition:"none" },
+  "아로마베일":     { mult:1,    condition:"none" },
+  "면역":           { mult:1,    condition:"none" },
+  "에어록":         { mult:1,    condition:"none" }, // 날씨 무효
+  "클리어바디":     { mult:1,    condition:"none" }, // (이미 있음)
+  "하얀연기":       { mult:1,    condition:"none" },
+  "황금몸":         { mult:1,    condition:"none" }, // 변화기술 무효
+  "매직미러":       { mult:1,    condition:"none" }, // 변화기술 반사
+  "미러아머":       { mult:1,    condition:"none" }, // 능력 감소 반사
+  "날씨부정":       { mult:1,    condition:"none" },
+  // ── HP 회복
+  "재생력":         { mult:1,    condition:"none" }, // (이미 있음)
+  "자연회복":       { mult:1,    condition:"none" },
+  "먹보":           { mult:1,    condition:"none" },
+  "수확":           { mult:1,    condition:"none" },
+  "숙성":           { mult:1,    condition:"none" },
+  "볼주머니":       { mult:1,    condition:"none" },
+  "촉촉바디":       { mult:1,    condition:"none" }, // 비올 때 상태이상 회복
+  "젖은접시":       { mult:1,    condition:"none" }, // 비올 때 HP 조금 회복
+  "아이스바디":     { mult:1,    condition:"none" }, // 눈올 때 HP 회복
+  "되새김질":       { mult:1,    condition:"none" },
+  // ── 날씨/필드 효과
+  "모래의힘":       { mult:1,    condition:"none" }, // 모래 시 바위/강철/땅 ×1.3
+  "모래뿜기":       { mult:1,    condition:"none" },
+  "모래숨기":       { mult:1,    condition:"none" },
+  "모래헤치기":     { mult:1,    condition:"none" },
+  "눈숨기":         { mult:1,    condition:"none" },
+  "눈치우기":       { mult:1,    condition:"none" },
+  "그래스메이커":   { mult:1,    condition:"none" },
+  "미스트메이커":   { mult:1,    condition:"none" },
+  "일렉트릭메이커": { mult:1,    condition:"none" },
+  "사이코메이커":   { mult:1,    condition:"none" },
+  "제로포밍":       { mult:1,    condition:"none" },
+  "풍력발전":       { mult:1,    condition:"none" },
+  // ── 명중 관련
+  "노가드":         { mult:1,    condition:"none" }, // 명중 100%
+  "복안":           { mult:1,    condition:"none" }, // (이미 있음)
+  "날카로운눈":     { mult:1,    condition:"none" }, // (이미 있음)
+  "천진":           { mult:1,    condition:"none" }, // (이미 있음)
+  "심안":           { mult:1,    condition:"none" }, // 노말/격투→고스트 명중
+  "의욕":           { mult:1,    condition:"none" }, // 공격↑ 명중↓
+  // ── 도구/아이템 관련
+  "서투름":         { mult:1,    condition:"none" }, // 도구 사용 불가
+  "픽업":           { mult:1,    condition:"none" },
+  "볼줍기":         { mult:1,    condition:"none" },
+  "나쁜손버릇":     { mult:1,    condition:"none" },
+  "매지션":         { mult:1,    condition:"none" },
+  "점착":           { mult:1,    condition:"none" },
+  // ── 싱크로/복사
+  "싱크로":         { mult:1,    condition:"none" },
+  "트레이스":       { mult:1,    condition:"none" },
+  "리시버":         { mult:1,    condition:"none" },
+  "미라클스킨":     { mult:1,    condition:"none" },
+  "일루전":         { mult:1,    condition:"none" },
+  "의태":           { mult:1,    condition:"none" },
+  "변덕쟁이":       { mult:1,    condition:"none" },
+  "변색":           { mult:1,    condition:"none" },
+  "노말스킨":       { mult:1,    condition:"none" },
+  "멀티타입":       { mult:1,    condition:"none" },
+  "리베로":         { mult:1,    condition:"none" },
+  "촉촉보이스":     { mult:1,    condition:"none" }, // 소리기술→물 타입
+  // ── 재앙의 특성 (SV)
+  "재앙의검":       { mult:1,    condition:"none" }, // 상대 전체 방어↓
+  "재앙의구슬":     { mult:1,    condition:"none" }, // 상대 전체 특방↓
+  "재앙의그릇":     { mult:1,    condition:"none" }, // 상대 전체 특공↓
+  "재앙의목간":     { mult:1,    condition:"none" }, // 상대 전체 공격↓
+  // ── 배틀 진입 효과
+  "불요의검":       { mult:1,    condition:"none" }, // 등장 시 공격↑
+  "불굴의방패":     { mult:1,    condition:"none" }, // 등장 시 방어↑
+  "위협":           { mult:1,    condition:"none" }, // (이미 있음)
+  "위협":           { mult:1,    condition:"none" }, // (이미 있음)
+  "파수견":         { mult:1,    condition:"none" }, // 위협 받으면 공격↑
+  "겁쟁이":         { mult:1,    condition:"none" }, // (이미 있음)
+  "예지몽":         { mult:1,    condition:"none" },
+  "통찰":           { mult:1,    condition:"none" },
+  "다운로드":       { mult:1,    condition:"none" }, // 상대 방/특방 비교 후 공↑
+  // ── 이동/탈출 관련
+  "자력":           { mult:1,    condition:"none" },
+  "흡반":           { mult:1,    condition:"none" },
+  "도망태세":       { mult:1,    condition:"none" },
+  "도주":           { mult:1,    condition:"none" },
+  "스크루지느러미": { mult:1,    condition:"none" },
+  "원격":           { mult:1,    condition:"none" },
+  "보이지않는주먹": { mult:1,    condition:"none" }, // 방어 무시 접촉
+  "위기회피":       { mult:1,    condition:"none" },
+  "위험예지":       { mult:1,    condition:"none" },
+  "잠복":           { mult:1,    condition:"none" }, // 교체 후 2배
+  // ── 슬립/특이 상태
+  "수면스타트":     { mult:1,    condition:"none" }, // (이미 있음)
+  "절대안깸":       { mult:1,    condition:"none" },
+  "일찍기상":       { mult:1,    condition:"none" },
+  "나이트메어":     { mult:1,    condition:"none" },
+  "무아지경":       { mult:1,    condition:"none" },
+  // ── 기타 패시브
+  "하늘의은총":     { mult:1,    condition:"none" }, // 추가효과 2배
+  "프레셔":         { mult:1,    condition:"none" }, // 상대 PP 2 감소
+  "무희":           { mult:1,    condition:"none" },
+  "대운":           { mult:1,    condition:"none" },
+  "조가비갑옷":     { mult:1,    condition:"none" },
+  "전투무장":       { mult:1,    condition:"none" },
+  "주눅":           { mult:1,    condition:"none" },
+  "긴장감":         { mult:1,    condition:"none" },
+  "정신력":         { mult:1,    condition:"none" },
+  "둔감":           { mult:1,    condition:"none" },
+  "강인함":         { mult:1,    condition:"none" }, // (이미 있음)
+  "이상한비늘":     { mult:1,    condition:"none" },
+  "공생":           { mult:1,    condition:"none" },
+  "배터리":         { mult:1,    condition:"none" },
+  "파워스폿":       { mult:1,    condition:"none" },
+  "플러스":         { mult:1,    condition:"none" },
+  "마이너스":       { mult:1,    condition:"none" },
+  "텔레파시":       { mult:1,    condition:"none" },
+  "습기":           { mult:1,    condition:"none" }, // 자폭 봉쇄
+  "오라브레이크":   { mult:1,    condition:"none" }, // 오라 역전
+  "라이트메탈":     { mult:1,    condition:"none" },
+  "헤비메탈":       { mult:1,    condition:"none" },
+  "무도한행동":     { mult:1,    condition:"none" },
+  "투쟁심":         { mult:1,    condition:"none" },
+  "슬로스타트":     { mult:1,    condition:"none" },
+  "게으름":         { mult:1,    condition:"none" },
+  "기분파":         { mult:1,    condition:"none" },
+  "무기력":         { mult:1,    condition:"none" },
+  "발광":           { mult:1,    condition:"none" },
+  "깨어진갑옷":     { mult:1,    condition:"none" },
+  "탈":             { mult:1,    condition:"none" }, // 위장(따라큐)
+  "탈피":           { mult:1,    condition:"none" },
+  "부풀린가슴":     { mult:1,    condition:"none" },
+  "혼연일체":       { mult:1,    condition:"none" },
+  "화학변화가스":   { mult:1,    condition:"none" },
+  "어군":           { mult:1,    condition:"none" },
+  "미끈미끈":       { mult:1,    condition:"none" },
+  "솜털":           { mult:1,    condition:"none" },
+  "플라워기프트":   { mult:1,    condition:"none" },
+  "플라워베일":     { mult:1,    condition:"none" },
+  "플라워베일":     { mult:1,    condition:"none" },
+  "파스텔베일":     { mult:1,    condition:"none" },
+  "리프가드":       { mult:1,    condition:"none" },
+  "메가솔라":       { mult:1,    condition:"none" },
+  "프렌드가드":     { mult:1,    condition:"none" },
+  "배리어프리":     { mult:1,    condition:"none" },
+  "마그마의무장":   { mult:1,    condition:"none" },
+  "끝의대지":       { mult:1,    condition:"none" },
+  "끝의대지":       { mult:1,    condition:"none" },
+  "개미지옥":       { mult:1,    condition:"none" },
+  "가속":           { mult:1,    condition:"none" },
+  "가시지않는향기": { mult:1,    condition:"none" },
+  "갈지자걸음":     { mult:1,    condition:"none" },
+  "감미로운꿀":     { mult:1,    condition:"none" },
+  "강철술사":       { mult:1,    condition:"none" },
+  "과학의힘":       { mult:1,    condition:"none" },
+  "관통드릴":       { mult:1,    condition:"none" },
+  "괴력집게":       { mult:1,    condition:"none" },
+  "균사의힘":       { mult:1,    condition:"none" },
+  "기묘한약":       { mult:1,    condition:"none" },
+  "꽃가루전해":     { mult:1,    condition:"none" },
+  "꼬르륵스위치":   { mult:1,    condition:"none" },
+  "꾸덕꾸덕굳기":   { mult:1,    condition:"none" },
+  "꿀모으기":       { mult:1,    condition:"none" },
+  "나쁜손버릇":     { mult:1,    condition:"none" },
+  "나이트메어":     { mult:1,    condition:"none" },
+  "내용물분출":     { mult:1,    condition:"none" },
+  "넘치는씨":       { mult:1,    condition:"none" },
+  "노릇노릇바디":   { mult:1,    condition:"none" },
+  "눈치우기":       { mult:1,    condition:"none" },
+  "사령탑":         { mult:1,    condition:"none" },
+  "시간벌기":       { mult:1,    condition:"none" },
+  "바위나르기":     { mult:1,    condition:"none" },
+  "전기로바꾸기":   { mult:1,    condition:"none" },
+  "돌머리":         { mult:1,    condition:"none" }, // 반동 없음
+  "메탈프로텍트":   { mult:1,    condition:"none" },
+  "그대로꿀꺽미사일":{ mult:1,   condition:"none" },
+  "AR시스템":       { mult:1,    condition:"none" },
+  "하바네로분출":   { mult:1,    condition:"none" },
+  "리밋실드":       { mult:1,    condition:"none" },
+  "굳건한신념":     { mult:1,    condition:"none" },
+  "일루전":         { mult:1,    condition:"none" },
+  "구름바라기":     { mult:1,    condition:"none" }, // (이미 있음)
+  "스위트베일":     { mult:1,    condition:"none" },
 };
 const ABILITY_NAMES = Object.keys(ABILITIES);
 
@@ -829,6 +1132,14 @@ function getAbilityMult(abilityName, move, isSTAB) {
        c === "normal_to_fairy" || c === "normal_to_electric") && m.type === "노말")
     return { mult:ab.mult, stabOverride:false };
   if (c === "water_or_fire_hit") return { mult:ab.mult, stabOverride:false };
+  if (c === "type_fire"     && m.type === "불꽃")   return { mult:ab.mult, stabOverride:false };
+  if (c === "type_water"    && m.type === "물")     return { mult:ab.mult, stabOverride:false };
+  if (c === "type_electric" && m.type === "전기")   return { mult:ab.mult, stabOverride:false };
+  if (c === "type_dragon"   && m.type === "드래곤") return { mult:ab.mult, stabOverride:false };
+  if (c === "type_dark"     && m.type === "악")     return { mult:ab.mult, stabOverride:false };
+  if (c === "type_fairy"    && m.type === "페어리") return { mult:ab.mult, stabOverride:false };
+  if (c === "type_steel"    && m.type === "강철")   return { mult:ab.mult, stabOverride:false };
+  if (c === "sound"         && m.tags && m.tags.includes("sound")) return { mult:ab.mult, stabOverride:false };
   return { mult:1, stabOverride:false };
 }
 
