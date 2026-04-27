@@ -20,6 +20,8 @@ let _naturePendingElId = null;
 function fillNatureSelect(elId) {
   const el = document.getElementById(elId);
   if (!el) return;
+  // 옵션 채우기 (값 대입이 실제로 반영되려면 option이 존재해야 함)
+  el.innerHTML = NATURE_NAMES.map(n => `<option value="${n}">${n}</option>`).join('');
   el.style.display = 'none';
   if (document.getElementById(elId + '-np-btn')) return;
   const btn = document.createElement('button');
@@ -126,7 +128,7 @@ function applyStorageEntry(id) {
       document.getElementById('t1-ev-range').value = ev;
       document.getElementById('t1-ev-val').textContent = ev;
       document.getElementById('t1-ev-num').value = ev;
-      if (entry.ability) document.getElementById('t1-ability').value = entry.ability;
+      if (entry.ability) { document.getElementById('t1-ability').value = entry.ability; syncAbilityInput('t1-ability'); }
       if (entry.item) document.getElementById('t1-item').value = entry.item;
       if (entry.moves?.[0]?.name) T1.onMoveSelect(entry.moves[0].name);
       T1.update();
@@ -189,12 +191,76 @@ function fillItemSelect(elId) {
   ).join('');
 }
 
-// ===== 공통 유틸: 특성 셀렉트 채우기 =====
+// ===== 공통 유틸: 특성 검색 드롭다운 =====
 function fillAbilitySelect(elId) {
   const el = document.getElementById(elId);
-  el.innerHTML = ABILITY_NAMES.map(n =>
-    `<option value="${n}">${n}</option>`
-  ).join('');
+  if (!el) return;
+  // 값 대입이 실제로 반영되도록 옵션 채우기
+  el.innerHTML = ABILITY_NAMES.map(n => `<option value="${n}">${n}</option>`).join('');
+  el.value = '없음';
+  el.style.display = 'none';
+  if (document.getElementById(elId + '-ab-wrap')) return;
+
+  const wrap = document.createElement('div');
+  wrap.id = elId + '-ab-wrap';
+  wrap.className = 'ability-search-wrap';
+
+  const input = document.createElement('input');
+  input.type = 'text';
+  input.id = elId + '-ab-input';
+  input.className = 'ability-search-input';
+  input.placeholder = '특성 검색...';
+  input.value = '없음';
+  input.autocomplete = 'off';
+
+  const list = document.createElement('div');
+  list.id = elId + '-ab-list';
+  list.className = 'ability-search-list hidden';
+
+  wrap.appendChild(input);
+  wrap.appendChild(list);
+  el.parentNode.insertBefore(wrap, el.nextSibling);
+
+  function render(q) {
+    const query = (q || '').toLowerCase();
+    const filtered = query
+      ? ABILITY_NAMES.filter(n => n.toLowerCase().includes(query))
+      : ABILITY_NAMES;
+    list.innerHTML = filtered.length === 0
+      ? '<div class="dropdown-empty">검색 결과 없음</div>'
+      : filtered.slice(0, 60).map(n =>
+          `<div class="dropdown-item" data-val="${n}">${n}</div>`
+        ).join('');
+    list.classList.remove('hidden');
+  }
+
+  input.addEventListener('focus', () => {
+    input.select();
+    render(input.value === '없음' ? '' : input.value);
+  });
+  input.addEventListener('input', () => render(input.value));
+
+  list.addEventListener('mousedown', e => {
+    const item = e.target.closest('.dropdown-item');
+    if (!item) return;
+    e.preventDefault();
+    const val = item.dataset.val;
+    input.value = val;
+    list.classList.add('hidden');
+    el.value = val;
+    el.dispatchEvent(new Event('change'));
+  });
+
+  document.addEventListener('click', e => {
+    if (!wrap.contains(e.target)) list.classList.add('hidden');
+  });
+}
+
+// 특성 input 표시값 동기화 (프로그래밍으로 select.value 변경 후 호출)
+function syncAbilityInput(elId) {
+  const el = document.getElementById(elId);
+  const input = document.getElementById(elId + '-ab-input');
+  if (el && input) input.value = el.value || '없음';
 }
 
 // ===== 공통 유틸: 폼 셀렉트 채우기 =====

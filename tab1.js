@@ -293,7 +293,7 @@ const T1 = {
       document.getElementById('t1-ev-num').value = data.ev;
     }
     if (data.item)    document.getElementById('t1-item').value = data.item;
-    if (data.ability) document.getElementById('t1-ability').value = data.ability;
+    if (data.ability) { document.getElementById('t1-ability').value = data.ability; syncAbilityInput('t1-ability'); }
     if (data.weather) document.getElementById('t1-weather').value = data.weather;
     if (data.rank !== undefined) {
       T1.rank = data.rank;

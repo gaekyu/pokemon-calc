@@ -131,6 +131,21 @@ body {
   .side-layout { grid-template-columns: 1fr; }
 }
 
+/* ===== 특성 검색 드롭다운 ===== */
+.ability-search-wrap { position: relative; }
+.ability-search-input {
+  width: 100%; background: var(--surface2); border: 1px solid var(--border2);
+  border-radius: var(--radius); padding: 7px 10px; color: var(--text);
+  font-size: 13px; outline: none;
+}
+.ability-search-input:focus { border-color: var(--accent); }
+.ability-search-list {
+  position: absolute; top: 100%; left: 0; right: 0; z-index: 300;
+  background: var(--surface2); border: 1px solid var(--border2);
+  border-radius: var(--radius); max-height: 200px; overflow-y: auto;
+  margin-top: 2px; box-shadow: var(--shadow);
+}
+
 /* ===== 성격 피커 버튼 ===== */
 .nature-picker-btn {
   width: 100%; background: var(--surface2); border: 1px solid var(--border2);

@@ -347,7 +347,7 @@ const T3 = {
       document.getElementById('modal-nature').value = entry.nature;
       updateNaturePickerDisplay('modal-nature');
     }
-    if (entry.ability) document.getElementById('modal-ability').value = entry.ability;
+    if (entry.ability) { document.getElementById('modal-ability').value = entry.ability; syncAbilityInput('modal-ability'); }
     if (entry.item)    document.getElementById('modal-item').value    = entry.item;
 
     // 이미지 + 폼
