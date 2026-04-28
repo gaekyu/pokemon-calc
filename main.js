@@ -119,12 +119,24 @@ function applyStorageEntry(id) {
   const target = _storagePickTarget;
   closeStoragePick();
 
+  // 성격 설정 헬퍼 (빈 값이면 기본값 적용)
+  function applyNature(elId, natureName) {
+    const el = document.getElementById(elId);
+    if (!el) return;
+    el.value = natureName || '노력(무보정)';
+    updateNaturePickerDisplay(elId);
+    el.dispatchEvent(new Event('change'));
+  }
+
   if (target === 't1-atk') {
     switchTab('tab1');
     setTimeout(() => {
       if (entry.pokemon) T1.onPokeSelect(entry.pokemon);
-      if (entry.nature) { document.getElementById('t1-nature').value = entry.nature; updateNaturePickerDisplay('t1-nature'); }
-      const ev = evs.atk || 0;
+      applyNature('t1-nature', entry.nature);
+      // 공격/특공 중 높은 쪽 기준으로 노력치 로드
+      const poke1 = entry.pokemon ? POKEMON_MAP[entry.pokemon] : null;
+      const evKey = (poke1 && poke1.spa > poke1.atk) ? 'spa' : 'atk';
+      const ev = evs[evKey] || 0;
       document.getElementById('t1-ev-range').value = ev;
       document.getElementById('t1-ev-val').textContent = ev;
       document.getElementById('t1-ev-num').value = ev;
@@ -137,16 +149,18 @@ function applyStorageEntry(id) {
     switchTab('tab1');
     setTimeout(() => {
       if (entry.pokemon) T1.onDefPokeSelect(entry.pokemon);
-      if (entry.nature) { document.getElementById('t1-def-nature').value = entry.nature; updateNaturePickerDisplay('t1-def-nature'); }
+      applyNature('t1-def-nature', entry.nature);
       document.getElementById('t1-def-hp-ev').value = evs.hp || 0;
-      document.getElementById('t1-def-def-ev').value = evs.def || 0;
+      // 공격측 기술이 특수이면 특방, 물리이면 방어 노력치 로드
+      const defEvKey = (T1.move && T1.move.cat === '특수') ? 'spd' : 'def';
+      document.getElementById('t1-def-def-ev').value = evs[defEvKey] || 0;
       T1.update();
     }, 50);
   } else if (target === 't5-my') {
     switchTab('tab5');
     setTimeout(() => {
       if (entry.pokemon) T5.onPokeSelect(entry.pokemon);
-      if (entry.nature) { document.getElementById('t5-nature').value = entry.nature; updateNaturePickerDisplay('t5-nature'); }
+      applyNature('t5-nature', entry.nature);
       const ev = evs.spe || 0;
       document.getElementById('t5-ev-range').value = ev;
       document.getElementById('t5-ev-val').textContent = ev;
@@ -158,10 +172,11 @@ function applyStorageEntry(id) {
     switchTab('tab5');
     setTimeout(() => {
       if (entry.pokemon) T5.onCmpPokeSelect(entry.pokemon);
-      if (entry.nature) { document.getElementById('t5-cmp-nature').value = entry.nature; updateNaturePickerDisplay('t5-cmp-nature'); }
+      applyNature('t5-cmp-nature', entry.nature);
       const ev = evs.spe || 0;
       document.getElementById('t5-cmp-ev-range').value = ev;
       document.getElementById('t5-cmp-ev-val').textContent = ev;
+      document.getElementById('t5-cmp-ev-num') && (document.getElementById('t5-cmp-ev-num').value = ev);
       if (entry.item) document.getElementById('t5-cmp-item').value = entry.item;
       T5.update();
     }, 50);
@@ -169,7 +184,7 @@ function applyStorageEntry(id) {
     switchTab('tab4');
     setTimeout(() => {
       if (entry.pokemon) T4.onPokeSelect(entry.pokemon);
-      if (entry.nature) { document.getElementById('t4-nature').value = entry.nature; updateNaturePickerDisplay('t4-nature'); }
+      applyNature('t4-nature', entry.nature);
       document.getElementById('t4-hp-ev').value = evs.hp || 0;
       document.getElementById('t4-def-ev').value = evs.def || 0;
       T4.updateMyStats();

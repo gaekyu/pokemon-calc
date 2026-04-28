@@ -146,6 +146,11 @@ body {
   margin-top: 2px; box-shadow: var(--shadow);
 }
 
+/* ===== 엔트리 드래그앤드롭 ===== */
+.sortable-ghost { opacity: 0.3; }
+#t3-entry-list .save-card { cursor: grab; }
+#t3-entry-list .save-card:active { cursor: grabbing; }
+
 /* ===== 성격 피커 버튼 ===== */
 .nature-picker-btn {
   width: 100%; background: var(--surface2); border: 1px solid var(--border2);
@@ -1444,6 +1449,7 @@ textarea { resize: vertical; min-height: 60px; }
 <div class="toast-container" id="toast-container"></div>
 
 <!-- JavaScript -->
+<script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.3/Sortable.min.js"></script>
 <script src="pokemon-db.js"></script>
 <script src="move-db.js"></script>
 <script src="calc.js"></script>

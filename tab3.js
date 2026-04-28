@@ -4,6 +4,7 @@ const T3 = {
   STORAGE_KEY: 'pkmcalc_saves',
   editingId: null,
   expandedIds: new Set(),   // 펼쳐진 카드 ID 집합
+  _sortable: null,
 
   // ===== 모달 EV → 실수치 업데이트 =====
   updateModalEvStats() {
@@ -178,6 +179,7 @@ const T3 = {
     if (entryItems.length > 0) {
       entrySection.style.display = 'block';
       entryList.innerHTML = entryItems.map(e => T3.renderCard(e, true)).join('');
+      T3.initEntrySortable();
     } else {
       entrySection.style.display = 'none';
     }
@@ -190,6 +192,21 @@ const T3 = {
     }
     container.innerHTML = rest.map(e => T3.renderCard(e, false)).join('');
     if (rest.length === 0) container.innerHTML = `<div class="save-empty" style="padding:16px;">모든 포켓몬이 엔트리에 있어요.</div>`;
+  },
+
+  initEntrySortable() {
+    const el = document.getElementById('t3-entry-list');
+    if (!el || typeof Sortable === 'undefined') return;
+    if (T3._sortable) T3._sortable.destroy();
+    T3._sortable = Sortable.create(el, {
+      animation: 150,
+      ghostClass: 'sortable-ghost',
+      onEnd() {
+        const newIds = [...el.querySelectorAll('.save-card')]
+          .map(c => parseInt(c.dataset.id));
+        T3.saveEntry(newIds);
+      },
+    });
   },
 
   renderCard(entry, isEntry) {
