@@ -690,6 +690,10 @@ const ITEMS = {
   "개굴닌자나이트":  { atkMult:1, defMult:1, speMult:1, moveType:null },
   "망나뇽나이트":    { atkMult:1, defMult:1, speMult:1, moveType:null },
   "메가니움나이트":  { atkMult:1, defMult:1, speMult:1, moveType:null },
+  "픽시나이트":      { atkMult:1, defMult:1, speMult:1, moveType:null },
+  "우츠보트나이트":  { atkMult:1, defMult:1, speMult:1, moveType:null },
+  "아쿠스타나이트":  { atkMult:1, defMult:1, speMult:1, moveType:null },
+  "장크로다일나이트":{ atkMult:1, defMult:1, speMult:1, moveType:null },
 };
 const ITEM_NAMES = Object.keys(ITEMS);
 
