@@ -288,11 +288,12 @@ const T3 = {
       bulkHtml = `<div class="bulk-display">물리내구: <b>${fmt(calcBulk(hp,def))}</b> &nbsp; 특수내구: <b>${fmt(calcBulk(hp,spd))}</b></div>`;
     }
 
-    const entryBadge = isEntry ? `<div style="font-size:9px; color:var(--positive); text-align:center; margin-bottom:2px;">★ 엔트리</div>` : '';
+    const starClass = isEntry ? 'on' : '';
+    const starTitle = isEntry ? '엔트리 해제' : '엔트리 지정';
 
     return `
       <div class="save-card" data-id="${entry.id}">
-        ${entryBadge}
+        <button class="save-card-star ${starClass}" onclick="event.stopPropagation();T3.toggleEntry(${entry.id})" title="${starTitle}">${isEntry ? '★' : '☆'}</button>
         <img src="${spriteUrl}" class="save-card-sprite" onerror="this.style.display='none'" alt="">
         <div class="save-card-name" title="${entry.label || entry.pokemon || ''}">${entry.label || entry.pokemon || '이름 없음'}</div>
         <div class="save-card-meta">${entry.pokemon||''}</div>
@@ -311,7 +312,6 @@ const T3 = {
             <button class="btn btn-secondary btn-sm" onclick="T3.loadInto(${entry.id},'t1-def')" title="방어측으로 불러오기">🛡️</button>
             <button class="btn btn-secondary btn-sm" onclick="T3.loadInto(${entry.id},'t5-my')" title="스피드로 불러오기">💨</button>
             <button class="btn btn-secondary btn-sm" onclick="T3.loadInto(${entry.id},'t4')" title="역추적으로 불러오기">🔍</button>
-            <button class="btn btn-secondary btn-sm" onclick="T3.toggleEntry(${entry.id})" style="grid-column:span 2;">${T3.isInEntry(entry.id) ? '★ 엔트리 해제' : '☆ 엔트리 지정'}</button>
             <button class="btn btn-secondary btn-sm" onclick="T3.editEntry(${entry.id})" style="grid-column:span 2;">✏️ 편집</button>
             <button class="btn btn-danger btn-sm" onclick="T3.confirmDelete(${entry.id})" style="grid-column:span 2;">삭제</button>
           </div>
