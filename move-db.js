@@ -709,6 +709,7 @@ const ITEMS = {
   "할비롱나이트":    { atkMult:1, defMult:1, speMult:1, moveType:null },
   "스코빌런나이트":  { atkMult:1, defMult:1, speMult:1, moveType:null },
   "킬라플로르나이트":{ atkMult:1, defMult:1, speMult:1, moveType:null },
+  "요가램나이트":    { atkMult:1, defMult:1, speMult:1, moveType:null },
 };
 const ITEM_NAMES = Object.keys(ITEMS);
 
