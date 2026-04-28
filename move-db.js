@@ -681,6 +681,11 @@ const ITEMS = {
   "럭시오나이트":    { atkMult:1, defMult:1, speMult:1, moveType:null },
   "엘레이드나이트":  { atkMult:1, defMult:1, speMult:1, moveType:null },
   "다부니나이트":    { atkMult:1, defMult:1, speMult:1, moveType:null },
+  "브리가론나이트":  { atkMult:1, defMult:1, speMult:1, moveType:null },
+  "마폭시나이트":    { atkMult:1, defMult:1, speMult:1, moveType:null },
+  "개굴닌자나이트":  { atkMult:1, defMult:1, speMult:1, moveType:null },
+  "망나뇽나이트":    { atkMult:1, defMult:1, speMult:1, moveType:null },
+  "메가니움나이트":  { atkMult:1, defMult:1, speMult:1, moveType:null },
 };
 const ITEM_NAMES = Object.keys(ITEMS);
 
