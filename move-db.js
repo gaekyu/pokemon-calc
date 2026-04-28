@@ -694,6 +694,21 @@ const ITEMS = {
   "우츠보트나이트":  { atkMult:1, defMult:1, speMult:1, moveType:null },
   "아쿠스타나이트":  { atkMult:1, defMult:1, speMult:1, moveType:null },
   "장크로다일나이트":{ atkMult:1, defMult:1, speMult:1, moveType:null },
+  "무장조나이트":    { atkMult:1, defMult:1, speMult:1, moveType:null },
+  "치렁나이트":      { atkMult:1, defMult:1, speMult:1, moveType:null },
+  "이어롭나이트":    { atkMult:1, defMult:1, speMult:1, moveType:null },
+  "눈여아나이트":    { atkMult:1, defMult:1, speMult:1, moveType:null },
+  "염무왕나이트":    { atkMult:1, defMult:1, speMult:1, moveType:null },
+  "몰드류나이트":    { atkMult:1, defMult:1, speMult:1, moveType:null },
+  "샹델라나이트":    { atkMult:1, defMult:1, speMult:1, moveType:null },
+  "골루그나이트":    { atkMult:1, defMult:1, speMult:1, moveType:null },
+  "플라엣테나이트":  { atkMult:1, defMult:1, speMult:1, moveType:null },
+  "냐오닉스나이트":  { atkMult:1, defMult:1, speMult:1, moveType:null },
+  "루차불나이트":    { atkMult:1, defMult:1, speMult:1, moveType:null },
+  "모단단게나이트":  { atkMult:1, defMult:1, speMult:1, moveType:null },
+  "할비롱나이트":    { atkMult:1, defMult:1, speMult:1, moveType:null },
+  "스코빌런나이트":  { atkMult:1, defMult:1, speMult:1, moveType:null },
+  "킬라플로르나이트":{ atkMult:1, defMult:1, speMult:1, moveType:null },
 };
 const ITEM_NAMES = Object.keys(ITEMS);
 
